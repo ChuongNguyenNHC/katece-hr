@@ -1,0 +1,22 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())   // Mã TK (UUID)
+  username  String   @unique                // Tên TK
+  fullName  String                           // Họ và tên
+  position  String                           // Chức vụ
+  status    String   @default("active")     // Trạng thái
+  phone     String                           // Số điện thoại
+  cccd      String   @unique                // CCCD
+  email     String   @unique                // Email
+  createdAt DateTime @default(now())        // Ngày tạo
+
+  @@map("users")
+}

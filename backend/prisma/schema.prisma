@@ -17,6 +17,7 @@ model User {
   cccd      String   @unique                // CCCD
   email     String   @unique                // Email
   createdAt DateTime @default(now())        // Ngày tạo
+  password  String
 
   @@map("users")
 }

@@ -1,183 +1,93 @@
 "use client";
 
 import React, { useState } from 'react';
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Lock, User } from "lucide-react";
 
-export default function TestPage() {
+export default function AuthPage() {
     const [loginData, setLoginData] = useState({ login: '', password: '' });
-    const [registerData, setRegisterData] = useState({
-        username: '', email: '', password: '', fullName: '', position: '', phone: '', cccd: ''
-    });
 
     const handleLogin = async (e :any) => {
-        e.prevenDefault();
-        const res = await fetch('http://localhost:5000/api/taikhoan/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(loginData)
-        });
-
-        const result = await res.json();
-        console.log('Login Result:', result);
-        alert(JSON.stringify(result));
-    }
-
-    const handleRegister = async (e: any) => {
         e.preventDefault();
-        const res = await fetch('http://localhost:5000/api/taikhoan/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(registerData)
-        });
-
-        const result = await res.json();
-        // console.log('Register Result:', result);
-        console.log('Đăng ký thành công');
-        // alert(JSON.stringify(result));
-        alert('Đăng ký thành công');
+        try {
+            const res = await fetch('http://localhost:5000/api/taikhoan/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(loginData)
+            });
+            const result = await res.json();
+            console.log('Login Result:', result);
+            alert(JSON.stringify(result));
+        } catch (error) {
+            console.error(error);
+            alert('Login failed. Check console.');
+        }
     }
 
     return (
-        <div style={{ display: "flex", gap: "40px", padding: "40px", fontFamily: "sans-serif",}}>
+        <div className="flex min-h-screen items-center justify-center bg-zinc-900 relative overflow-hidden">
+            {/* Background */}
+            <div className="absolute inset-0 z-0">
+                 <Image
+                    src="/hero-factory.png"
+                    alt="Background"
+                    fill
+                    className="object-cover opacity-30 blur-sm"
+                    priority
+                />
+                <div className="absolute inset-0 bg-black/40" />
+            </div>
 
-      {/* LOGIN FORM */}
-      <form
-        onSubmit={handleLogin}
-        style={{
-          border: "1px solid #ccc",
-          padding: "20px",
-          width: "300px",
-          borderRadius: "8px",
-        }}>
-        <h2>Login</h2>
+            {/* Auth Card */}
+            <div className="relative z-10 w-full max-w-md bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl border border-white/20 p-8 m-4">
+                <div className="text-center mb-8">
+                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 font-bold text-white text-xl mb-4 shadow-lg shadow-blue-900/50">
+                        K
+                    </div>
+                    <h1 className="text-2xl font-bold text-white tracking-tight">Employee Login</h1>
+                    <p className="text-white/60 text-sm mt-2">Enter your credentials to access the workspace.</p>
+                </div>
 
-        <label>Username / Email</label>
-        <input
-          type="text"
-          value={loginData.login}
-          onChange={(e) =>
-            setLoginData({ ...loginData, login: e.target.value })
-          }
-          style={{ width: "100%", padding: "6px", marginBottom: "10px" }}
-        />
-
-        <label>Password</label>
-        <input
-          type="password"
-          value={loginData.password}
-          onChange={(e) =>
-            setLoginData({ ...loginData, password: e.target.value })
-          }
-          style={{ width: "100%", padding: "6px", marginBottom: "10px" }}
-        />
-
-        <button
-          type="submit"
-          style={{
-            width: "100%",
-            padding: "8px",
-            background: "black",
-            color: "white",
-            borderRadius: "4px",
-            cursor: "pointer",
-          }}
-        >
-          Login
-        </button>
-      </form>
-
-      {/* REGISTER FORM */}
-      <form
-        onSubmit={handleRegister}
-        style={{
-          border: "1px solid #ccc",
-          padding: "20px",
-          width: "300px",
-          borderRadius: "8px",
-        }}
-      >
-        <h2>Register</h2>
-
-        <label>Username</label>
-        <input
-          type="text"
-          value={registerData.username}
-          onChange={(e) =>
-            setRegisterData({ ...registerData, username: e.target.value })
-          }
-          style={{ width: "100%", padding: "6px", marginBottom: "10px" }}
-        />
-
-        <label>Email</label>
-        <input
-          type="email"
-          value={registerData.email}
-          onChange={(e) =>
-            setRegisterData({ ...registerData, email: e.target.value })
-          }
-          style={{ width: "100%", padding: "6px", marginBottom: "10px" }}
-        />
-
-        <label>Password</label>
-        <input
-          type="password"
-          value={registerData.password}
-          onChange={(e) =>
-            setRegisterData({ ...registerData, password: e.target.value })
-          }
-          style={{ width: "100%", padding: "6px", marginBottom: "10px" }}
-        />
-
-        <label>Full Name</label>
-        <input
-          type="text"
-          value={registerData.fullName}
-          onChange={(e) =>
-            setRegisterData({ ...registerData, fullName: e.target.value })
-          }
-          style={{ width: "100%", padding: "6px", marginBottom: "10px" }}
-        />
-
-        <label>Position</label>
-        <input
-          type="text"
-          value={registerData.position}
-          onChange={(e) =>
-            setRegisterData({ ...registerData, position: e.target.value })
-          }
-          style={{ width: "100%", padding: "6px", marginBottom: "10px" }}
-        />
-        <label>Phone</label>
-        <input
-          type="text"
-          value={registerData.phone}
-          onChange={(e) =>
-            setRegisterData({ ...registerData, phone: e.target.value })
-          }
-          style={{ width: "100%", padding: "6px", marginBottom: "10px" }}
-        />
-        <label>CCCD</label>
-        <input
-          type="text"
-          value={registerData.cccd}
-          onChange={(e) =>
-            setRegisterData({ ...registerData, cccd: e.target.value })
-          }
-          style={{ width: "100%", padding: "6px", marginBottom: "10px" }}
-        />
-        <button
-          type="submit"
-          style={{
-            width: "100%",
-            padding: "8px",
-            background: "green",
-            color: "white",
-            borderRadius: "4px",
-            cursor: "pointer",
-          }}
-        >
-          Register
-        </button>
-      </form>
-    </div>
-  );
+                <form onSubmit={handleLogin} className="space-y-4">
+                    <div className="space-y-2">
+                        <label className="text-xs font-medium text-white/80 uppercase tracking-wide">Username or Email</label>
+                        <div className="relative">
+                            <User className="absolute left-3 top-2.5 h-4 w-4 text-white/50" />
+                            <Input
+                                type="text"
+                                placeholder="user@katece.com"
+                                value={loginData.login}
+                                onChange={(e) => setLoginData({ ...loginData, login: e.target.value })}
+                                className="pl-9 bg-white/5 border-white/10 text-white placeholder:text-white/20 focus-visible:ring-blue-500"
+                            />
+                        </div>
+                    </div>
+                        <div className="space-y-2">
+                        <label className="text-xs font-medium text-white/80 uppercase tracking-wide">Password</label>
+                        <div className="relative">
+                            <Lock className="absolute left-3 top-2.5 h-4 w-4 text-white/50" />
+                            <Input
+                                
+                                type="password"
+                                placeholder="••••••••"
+                                value={loginData.password}
+                                onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                                className="pl-9 bg-white/5 border-white/10 text-white placeholder:text-white/20 focus-visible:ring-blue-500"
+                            />
+                        </div>
+                    </div>
+                    
+                    <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-5 mt-4">
+                        Sign In
+                    </Button>
+                </form>
+                
+                <div className="mt-8 text-center text-xs text-white/40">
+                    <p>&copy; 2024 Katece Garment Factory. Secured System.</p>
+                </div>
+            </div>
+        </div>
+    );
 }

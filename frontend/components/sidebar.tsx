@@ -39,8 +39,15 @@ const hrSidebarItems: SidebarItem[] = [
   { icon: Users, label: "Nhân sự", href: "/hr/employees" },
   { icon: FileText, label: "Hợp đồng SX", href: "/hr/contracts" },
   { icon: Users, label: "Hợp đồng LĐ", href: "/hr/labor-contracts" },
-  { icon: Calendar, label: "Lịch quản lý", href: "/hr/schedule" },
   { icon: Package, label: "Sản phẩm", href: "/hr/products" },
+];
+
+const teamLeaderSidebarItems: SidebarItem[] = [
+  { icon: LayoutDashboard, label: "Tổng quan", href: "/team-leader/dashboard" },
+  { icon: Users, label: "Quản lý lịch làm", href: "/team-leader/manage-schedule" },
+  { icon: FileText, label: "Duyệt yêu cầu", href: "/team-leader/requests", count: 3 },
+  { icon: DollarSign, label: "Duyệt lương", href: "/team-leader/payroll-approval" },
+  { icon: Package, label: "Yêu cầu vật tư", href: "/team-leader/material-requests" },
 ];
 
 const accountantSidebarItems: SidebarItem[] = [
@@ -53,14 +60,17 @@ const secondaryItems: SidebarItem[] = [];
 export function Sidebar() {
   const pathname = usePathname();
   const isHr = pathname.startsWith("/hr");
+  const isTeamLeader = pathname.startsWith("/team-leader");
   const isEmployee = pathname.startsWith("/employee");
   const isAccountant = pathname.startsWith("/Accountant");
 
   const sidebarItems = isHr 
     ? hrSidebarItems 
-    : isAccountant 
-      ? accountantSidebarItems 
-      : employeeSidebarItems;
+    : isTeamLeader
+      ? teamLeaderSidebarItems
+      : isAccountant 
+        ? accountantSidebarItems 
+        : employeeSidebarItems;
 
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 bg-white border-r">
@@ -69,7 +79,7 @@ export function Sidebar() {
         <div className="mb-8 flex items-center gap-2 px-2">
             <div className="relative h-12 w-full flex items-center">
              <span className="text-2xl font-extrabold text-blue-950 flex items-center">
-                <span className="text-blue-600 mr-1">Nexus</span>
+                <span className="text-blue-600 mr-1">KateceHR</span>
                 <span className="bg-blue-600 text-white rounded-md px-2 py-0.5 text-sm ml-1 font-bold">HR</span>
              </span>
             </div>
@@ -112,26 +122,26 @@ export function Sidebar() {
           <div className="flex items-center gap-3 px-2">
             <div className="h-10 w-10 overflow-hidden rounded-full bg-gray-200 border-2 border-white shadow-sm">
               <img
-                src={isHr ? "https://i.pravatar.cc/150?u=sarah" : "https://i.pravatar.cc/150?u=alex"}
+                src={isHr ? "https://i.pravatar.cc/150?u=sarah" : isTeamLeader ? "https://i.pravatar.cc/150?u=mike" : "https://i.pravatar.cc/150?u=alex"}
                 alt="User"
                 className="h-full w-full object-cover"
               />
             </div>
             <div className="flex-1 overflow-hidden">
               <p className="truncate text-sm font-bold text-gray-800">
-                {isHr ? "Nguyễn Văn B" : "Nguyễn Văn A"}
+                {isHr ? "Nguyễn Văn B" : isTeamLeader ? "Trần Thị C (Tổ trưởng)" : "Nguyễn Văn A"}
               </p>
-               <Link href={isHr ? "/hr/profile" : "/employee/profile"} className="text-xs font-medium text-gray-500 hover:text-blue-600 flex items-center gap-2 pl-1 mb-1 mt-1">
+               <Link href={isHr ? "/hr/profile" : isTeamLeader ? "/team-leader/profile" : "/employee/profile"} className="text-xs font-medium text-gray-500 hover:text-blue-600 flex items-center gap-2 pl-1 mb-1 mt-1">
                   <User className="h-3 w-3" />
                   Xem hồ sơ
               </Link>
-               {isHr && (
+               {(isHr || isTeamLeader) && (
                   <>
-                    <Link href="/hr/income" className="text-xs font-medium text-gray-500 hover:text-blue-600 flex items-center gap-2 pl-1 mb-1">
+                    <Link href={isHr ? "/hr/income" : "/team-leader/income"} className="text-xs font-medium text-gray-500 hover:text-blue-600 flex items-center gap-2 pl-1 mb-1">
                         <DollarSign className="h-3 w-3" />
                         Thu nhập
                     </Link>
-                     <Link href="/hr/my-schedule" className="text-xs font-medium text-gray-500 hover:text-blue-600 flex items-center gap-2 pl-1 mb-1">
+                     <Link href={isHr ? "/hr/my-schedule" : "/team-leader/my-schedule"} className="text-xs font-medium text-gray-500 hover:text-blue-600 flex items-center gap-2 pl-1 mb-1">
                         <Calendar className="h-3 w-3" />
                         Lịch chấm công
                     </Link>

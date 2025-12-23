@@ -12,18 +12,10 @@ import {
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckInModal } from "@/components/check-in-modal";
+import { ScheduleView } from "@/components/schedule-view";
 import { mockEmployees, mockContracts, mockRequests, mockProducts } from "@/lib/mock-data";
 
 export default function HrDashboardPage() {
-  const [isCheckInModalOpen, setIsCheckInModalOpen] = useState(false);
-  const [checkInType, setCheckInType] = useState<"check-in" | "check-out">("check-in");
-
-  const handleCheckInClick = (type: "check-in" | "check-out") => {
-    setCheckInType(type);
-    setIsCheckInModalOpen(true);
-  };
-
   // Calculate Stats
   const totalEmployees = mockEmployees.length;
   const activeContracts = mockContracts.filter(c => c.trangThaiHopDongSX === 'active').length;
@@ -36,24 +28,10 @@ export default function HrDashboardPage() {
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">Tổng quan</h1>
           <p className="text-gray-500 mt-1">Tổng hợp hoạt động nhân sự và thống kê.</p>
         </div>
-        <div className="flex gap-3">
-             <Button 
-                onClick={() => handleCheckInClick("check-in")}
-                className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2 shadow-sm"
-             >
-                <MapPin className="h-4 w-4" />
-                Vào ca
-             </Button>
-              <Button 
-                onClick={() => handleCheckInClick("check-out")}
-                variant="outline"
-                className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 gap-2 shadow-sm"
-             >
-                <LogOutIcon className="h-4 w-4" />
-                Ra ca
-             </Button>
-        </div>
       </div>
+
+      {/* Shift Cards / Schedule View */}
+      <ScheduleView />
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card className="shadow-sm">
@@ -141,12 +119,6 @@ export default function HrDashboardPage() {
           </CardContent>
         </Card>
       </div>
-
-      <CheckInModal 
-        isOpen={isCheckInModalOpen} 
-        onClose={() => setIsCheckInModalOpen(false)} 
-        type={checkInType} 
-      />
     </div>
   );
 }

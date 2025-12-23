@@ -46,26 +46,27 @@ export default function AuthPage() {
                     <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 font-bold text-white text-xl mb-4 shadow-lg shadow-blue-900/50">
                         K
                     </div>
-                    <h1 className="text-2xl font-bold text-white tracking-tight">Employee Login</h1>
-                    <p className="text-white/60 text-sm mt-2">Enter your credentials to access the workspace.</p>
+                    <h1 className="text-2xl font-bold text-white tracking-tight">Đăng nhập nhân viên</h1>
+                    <p className="text-white/60 text-sm mt-2">Nhập thông tin xác thực để truy cập không gian làm việc.</p>
                 </div>
 
-                <form onSubmit={handleLogin} className="space-y-4">
+                <form onSubmit={handleLogin} className="space-y-4" autoComplete="off">
                     <div className="space-y-2">
-                        <label className="text-xs font-medium text-white/80 uppercase tracking-wide">Username or Email</label>
+                        <label className="text-xs font-medium text-white/80 uppercase tracking-wide">Tên đăng nhập hoặc Email</label>
                         <div className="relative">
                             <User className="absolute left-3 top-2.5 h-4 w-4 text-white/50" />
                             <Input
                                 type="text"
-                                placeholder="user@katece.com"
+                                placeholder="nguyenvana"
                                 value={loginData.login}
                                 onChange={(e) => setLoginData({ ...loginData, login: e.target.value })}
                                 className="pl-9 bg-white/5 border-white/10 text-white placeholder:text-white/20 focus-visible:ring-blue-500"
+                                autoComplete="off" // Explicitly off
                             />
                         </div>
                     </div>
                         <div className="space-y-2">
-                        <label className="text-xs font-medium text-white/80 uppercase tracking-wide">Password</label>
+                        <label className="text-xs font-medium text-white/80 uppercase tracking-wide">Mật khẩu</label>
                         <div className="relative">
                             <Lock className="absolute left-3 top-2.5 h-4 w-4 text-white/50" />
                             <Input
@@ -75,17 +76,18 @@ export default function AuthPage() {
                                 value={loginData.password}
                                 onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
                                 className="pl-9 bg-white/5 border-white/10 text-white placeholder:text-white/20 focus-visible:ring-blue-500"
+                                autoComplete="new-password" // Hack to often prevent password autofill
                             />
                         </div>
                     </div>
                     
                     <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-5 mt-4">
-                        Sign In
+                        Đăng nhập
                     </Button>
                 </form>
                 
                 <div className="mt-8 text-center text-xs text-white/40">
-                    <p>&copy; 2024 Katece Garment Factory. Secured System.</p>
+                    <p>&copy; 2024 Nhà máy may Katece. Hệ thống bảo mật.</p>
                 </div>
             </div>
         </div>

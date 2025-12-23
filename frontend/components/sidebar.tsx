@@ -51,7 +51,7 @@ const teamLeaderSidebarItems: SidebarItem[] = [
 ];
 
 const accountantSidebarItems: SidebarItem[] = [
-  { icon: SquarePen, label: "Edit Payroll", href: "/Accountant/EditPayroll" },
+  { icon: SquarePen, label: "Bảng lương", href: "/Accountant/EditPayroll" },
 ];
 
 // Removed "Requests" and "Settings" from here as per previous tasks

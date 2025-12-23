@@ -143,10 +143,10 @@ export const mockEmployees: Taikhoan[] = [
 
 // Mock Stages (Congdoan)
 export const mockStages: Congdoan[] = [
-  { id: "s1", created_at: "2023-01-01", tenCongDoan: "Cắt vải", donGia: 15 },
-  { id: "s2", created_at: "2023-01-01", tenCongDoan: "May ráp", donGia: 25 },
-  { id: "s3", created_at: "2023-01-01", tenCongDoan: "Ủi hoàn thiện", donGia: 10 },
-  { id: "s4", created_at: "2023-01-01", tenCongDoan: "Kiểm tra", donGia: 30 },
+  { id: "s1", created_at: "2023-01-01", tenCongDoan: "Cắt vải", donGia: 15000 },
+  { id: "s2", created_at: "2023-01-01", tenCongDoan: "May ráp", donGia: 25000 },
+  { id: "s3", created_at: "2023-01-01", tenCongDoan: "Ủi hoàn thiện", donGia: 10000 },
+  { id: "s4", created_at: "2023-01-01", tenCongDoan: "Kiểm tra", donGia: 30000 },
 ];
 
 // Mock Products (Sanpham)

@@ -13,7 +13,12 @@ import {
   Bell,
   LogOut,
   type LucideIcon,
+  LayoutDashboard,
+  Calendar,
+  Package,
+  Settings,
   SquarePen,
+  Briefcase
 } from "lucide-react";
 
 type SidebarItem = {
@@ -24,27 +29,46 @@ type SidebarItem = {
 };
 
 const employeeSidebarItems: SidebarItem[] = [
-  { icon: Home, label: "Home", href: "/employee/dashboard" },
-  { icon: FileText, label: "Requests", href: "/employee/requests", count: 2 },
-  { icon: User, label: "Profile", href: "/employee/profile" },
+  { icon: Home, label: "Trang chủ", href: "/employee/dashboard" },
+  { icon: Calendar, label: "Lịch làm việc", href: "/employee/schedule" },
+  { icon: User, label: "Hồ sơ", href: "/employee/profile" },
+];
+
+const hrSidebarItems: SidebarItem[] = [
+  { icon: LayoutDashboard, label: "Tổng quan", href: "/hr/dashboard" },
+  { icon: Users, label: "Nhân sự", href: "/hr/employees" },
+  { icon: FileText, label: "Hợp đồng SX", href: "/hr/contracts" },
+  { icon: Users, label: "Hợp đồng LĐ", href: "/hr/labor-contracts" },
+  { icon: Calendar, label: "Lịch quản lý", href: "/hr/schedule" },
+  { icon: Package, label: "Sản phẩm", href: "/hr/products" },
 ];
 
 const accountantSidebarItems: SidebarItem[] = [
   { icon: SquarePen, label: "Edit Payroll", href: "/Accountant/EditPayroll" },
 ];
 
+// Removed "Requests" and "Settings" from here as per previous tasks
 const secondaryItems: SidebarItem[] = [
-  { icon: MessageSquare, label: "Support", href: "/employee/support" },
+  { icon: MessageSquare, label: "Hỗ trợ", href: "/employee/support" },
   {
     icon: Bell,
-    label: "Notifications",
+    label: "Thông báo",
     href: "/employee/notifications",
-    count: 5,
+    count: 2,
   },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
+  const isHr = pathname.startsWith("/hr");
+  const isEmployee = pathname.startsWith("/employee");
+  const isAccountant = pathname.startsWith("/Accountant");
+
+  const sidebarItems = isHr 
+    ? hrSidebarItems 
+    : isAccountant 
+      ? accountantSidebarItems 
+      : employeeSidebarItems;
 
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 bg-white border-r">
@@ -61,32 +85,7 @@ export function Sidebar() {
 
         {/* Main Navigation */}
         <nav className="flex-1 space-y-2">
-          {/* Employee sidebar items */}
-          {pathname.startsWith("/employee") && employeeSidebarItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "flex items-center gap-4 rounded-lg px-4 py-3 text-sm font-medium transition-colors",
-                  isActive
-                    ? "bg-blue-50 text-blue-600"
-                    : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
-                )}
-              >
-                <item.icon className={cn("h-5 w-5", isActive ? "text-blue-600" : "text-gray-400")} />
-                <span className="flex-1">{item.label}</span>
-                {typeof item.count === "number" && item.count > 0 && (
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-xs text-white">
-                    {item.count}
-                  </span>
-                )}
-              </Link>
-            );
-          })}
-          {/* Accountant sidebar items */}
-          {pathname.startsWith("/Accountant") && accountantSidebarItems.map((item) => {
+          {sidebarItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
@@ -141,20 +140,35 @@ export function Sidebar() {
         <div className="mt-auto pt-8">
           <div className="flex items-center gap-3 px-2">
             <div className="h-10 w-10 overflow-hidden rounded-full bg-gray-200 border-2 border-white shadow-sm">
-               {/* Avatar Placeholder */}
               <img
-                src="https://github.com/shadcn.png" // Placeholder
+                src={isHr ? "https://i.pravatar.cc/150?u=sarah" : "https://i.pravatar.cc/150?u=alex"}
                 alt="User"
                 className="h-full w-full object-cover"
               />
             </div>
             <div className="flex-1 overflow-hidden">
               <p className="truncate text-sm font-bold text-gray-800">
-                Alex Johnson
+                {isHr ? "Nguyễn Văn B" : "Nguyễn Văn A"}
               </p>
-              <button className="flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-red-500 transition-colors">
+               <Link href={isHr ? "/hr/profile" : "/employee/profile"} className="text-xs font-medium text-gray-500 hover:text-blue-600 flex items-center gap-2 pl-1 mb-1 mt-1">
+                  <User className="h-3 w-3" />
+                  Xem hồ sơ
+              </Link>
+               {isHr && (
+                  <>
+                    <Link href="/hr/income" className="text-xs font-medium text-gray-500 hover:text-blue-600 flex items-center gap-2 pl-1 mb-1">
+                        <DollarSign className="h-3 w-3" />
+                        Thu nhập
+                    </Link>
+                     <Link href="/hr/my-schedule" className="text-xs font-medium text-gray-500 hover:text-blue-600 flex items-center gap-2 pl-1 mb-1">
+                        <Calendar className="h-3 w-3" />
+                        Lịch chấm công
+                    </Link>
+                  </>
+               )}
+               <button className="flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-red-500 transition-colors mt-2">
                 <LogOut className="h-3 w-3" />
-                Sign out
+                Đăng xuất
               </button>
             </div>
           </div>

@@ -17,9 +17,9 @@ import { mockEmployees, mockContracts, mockRequests, mockProducts } from "@/lib/
 
 export default function HrDashboardPage() {
   const [isCheckInModalOpen, setIsCheckInModalOpen] = useState(false);
-  const [checkInType, setCheckInType] = useState<"in" | "out">("in");
+  const [checkInType, setCheckInType] = useState<"check-in" | "check-out">("check-in");
 
-  const handleCheckInClick = (type: "in" | "out") => {
+  const handleCheckInClick = (type: "check-in" | "check-out") => {
     setCheckInType(type);
     setIsCheckInModalOpen(true);
   };
@@ -38,14 +38,14 @@ export default function HrDashboardPage() {
         </div>
         <div className="flex gap-3">
              <Button 
-                onClick={() => handleCheckInClick("in")}
+                onClick={() => handleCheckInClick("check-in")}
                 className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2 shadow-sm"
              >
                 <MapPin className="h-4 w-4" />
                 Vào ca
              </Button>
               <Button 
-                onClick={() => handleCheckInClick("out")}
+                onClick={() => handleCheckInClick("check-out")}
                 variant="outline"
                 className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 gap-2 shadow-sm"
              >

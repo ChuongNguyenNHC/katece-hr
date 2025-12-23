@@ -78,7 +78,7 @@ export default function ContractsPage() {
                         </td>
                         <td className="px-6 py-4">
                             <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs font-medium">
-                                {contract.ChiTiet?.length || 0} Mục
+                                {contract.PHANCONGSANXUAT?.length || 0} Mục
                             </span>
                         </td>
                         <td className="px-6 py-4">

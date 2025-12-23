@@ -219,6 +219,8 @@ export interface Bangluong {
   soGioOT?: number;
   maNguoiChinhSua?: string;
   
+  sanLuong?: number; // Production Output (products count)
+  
   // Relations
   TAIKHOAN?: Taikhoan;
 }

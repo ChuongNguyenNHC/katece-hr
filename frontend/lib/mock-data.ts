@@ -245,34 +245,72 @@ export const mockSalaries: Bangluong[] = [
         created_at: "2023-11-25",
         thangLuong: "2023-11-01",
         maNguoiDung: "1", // Alex
-        luongCoBan: 2000,
-        tienOT: 150,
-        phuCap: 100,
-        tienThuong: 50,
-        khauTru: 20,
-        tongLuong: 2280,
+        luongCoBan: 6500000,
+        tienOT: 500000,
+        phuCap: 1000000,
+        tienThuong: 300000,
+        khauTru: 150000,
+        tongLuong: 8150000,
         trangThaiDuyetLuong: "approved",
         TAIKHOAN: mockEmployees.find(e => e.id === "1"),
         soNgayNghiCoPhep: 1,
         soNgayNghiKhongPhep: 0,
-        soGioOT: 10
+        soGioOT: 10,
+        sanLuong: 1200
     },
     {
         id: "bl2",
         created_at: "2023-11-25",
         thangLuong: "2023-11-01",
         maNguoiDung: "2", // Sarah
-        luongCoBan: 3500,
+        luongCoBan: 12000000,
         tienOT: 0,
-        phuCap: 200,
-        tienThuong: 500,
-        khauTru: 50,
-        tongLuong: 4150,
+        phuCap: 2000000,
+        tienThuong: 1500000,
+        khauTru: 200000,
+        tongLuong: 15300000,
         trangThaiDuyetLuong: "pending",
         TAIKHOAN: mockEmployees.find(e => e.id === "2"),
          soNgayNghiCoPhep: 0,
         soNgayNghiKhongPhep: 0,
-        soGioOT: 0
+        soGioOT: 0,
+        sanLuong: 0
+    },
+    {
+        id: "bl3",
+        created_at: "2023-11-25",
+        thangLuong: "2023-11-01",
+        maNguoiDung: "1", // Nguyen Van A
+        luongCoBan: 6500000,
+        tienOT: 300000,
+        phuCap: 500000,
+        tienThuong: 200000,
+        khauTru: 0,
+        tongLuong: 7500000,
+        trangThaiDuyetLuong: "pending", // Pending for Team Leader approval
+        TAIKHOAN: mockEmployees.find(e => e.id === "1"),
+        soNgayNghiCoPhep: 0,
+        soNgayNghiKhongPhep: 0,
+        soGioOT: 5,
+        sanLuong: 1050
+    },
+    {
+        id: "bl4",
+        created_at: "2023-11-25",
+        thangLuong: "2023-11-01",
+        maNguoiDung: "3", // Le Van C
+        luongCoBan: 7000000,
+        tienOT: 250000,
+        phuCap: 500000,
+        tienThuong: 0,
+        khauTru: 100000,
+        tongLuong: 7650000,
+        trangThaiDuyetLuong: "pending",
+        TAIKHOAN: mockEmployees.find(e => e.id === "3"),
+        soNgayNghiCoPhep: 1,
+        soNgayNghiKhongPhep: 0,
+        soGioOT: 2,
+        sanLuong: 980
     }
 ];
 

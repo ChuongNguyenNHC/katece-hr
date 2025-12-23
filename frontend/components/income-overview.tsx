@@ -6,7 +6,7 @@ export function IncomeOverview() {
       {/* Chart Section */}
       <div className="col-span-2 rounded-2xl bg-white p-6 shadow-sm">
         <h3 className="mb-6 font-semibold text-gray-800">
-          Income for the past 14 days
+          Thu nhập 14 ngày qua
         </h3>
         <div className="relative h-40 w-full">
             {/* Simple Mock Chart */}
@@ -40,7 +40,7 @@ export function IncomeOverview() {
       {/* Estimated Income Section */}
       <div className="rounded-2xl bg-white p-6 shadow-sm">
         <h3 className="font-semibold text-gray-800">
-          Estimated income this month
+          Thu nhập ước tính tháng này
         </h3>
         <div className="mt-8">
             <div className="text-4xl font-bold text-rose-500">
@@ -49,7 +49,7 @@ export function IncomeOverview() {
             <div className="mt-2 flex items-center gap-1 text-sm text-rose-500">
                 <TrendingDown className="h-4 w-4" />
                 <span className="font-medium">100% (264000₫)</span>
-                <span className="text-gray-400">for last month</span>
+                <span className="text-gray-400">so với tháng trước</span>
             </div>
         </div>
       </div>

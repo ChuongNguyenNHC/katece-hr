@@ -70,7 +70,7 @@ export function ScheduleView() {
                 role="Công nhân may"
                 dateNumber="17"
                 time="08:00 - 16:00"
-                location="Xưởng 1, Tổ A"
+                location="KCN Mỹ Phước 3, Bình Dương"
                 status="active"
                 onCheckIn={openCheckIn}
                 onCheckOut={openCheckOut}
@@ -85,7 +85,7 @@ export function ScheduleView() {
                 role="Kiểm hàng"
                 dateNumber="18"
                 time="13:00 - 21:00"
-                location="Khu vực hoàn thiện"
+                location="KCN Mỹ Phước 3, Bình Dương"
                 status="upcoming"
             />
         </div>
@@ -98,7 +98,7 @@ export function ScheduleView() {
                 role="Kiểm hàng"
                 dateNumber="18"
                 time="13:00 - 21:00"
-                location="Khu vực hoàn thiện"
+                location="KCN Mỹ Phước 3, Bình Dương"
                 status="upcoming"
             />
         </div>

@@ -59,6 +59,15 @@ const accountantSidebarItems: SidebarItem[] = [
   { icon: MessageSquare, label: "Phản hồi lương", href: "/Accountant/EditPayrollRequests", count: 2 },
 ];
 
+// Ban quản lý xưởng
+const factoryManagementSidebarItems: SidebarItem[] = [
+  { icon: LayoutDashboard, label: "Thống kê", href: "/FactoryManager/Dashboard" },
+  { icon: LayoutDashboard, label: "Phân công hợp đồng", href: "/FactoryManager/ContractAllocation" },
+  { icon: LayoutDashboard, label: "Phân tổ công nhân", href: "/FactoryManager/WorkerGrouping" },
+  { icon: LayoutDashboard, label: "Yêu cầu", href: "/FactoryManager/Requests" },
+  { icon: LayoutDashboard, label: "Quản lý nhân viên", href: "/FactoryManager/WorkerManagement" },
+];
+
 // Removed "Requests" and "Settings" from here as per previous tasks
 const secondaryItems: SidebarItem[] = [];
 
@@ -68,6 +77,7 @@ export function Sidebar() {
   const isTeamLeader = pathname.startsWith("/team-leader");
   const isEmployee = pathname.startsWith("/employee");
   const isAccountant = pathname.startsWith("/Accountant");
+  const isFactoryManager = pathname.startsWith("/FactoryManager");
 
   const sidebarItems = isHr 
     ? hrSidebarItems 
@@ -75,7 +85,9 @@ export function Sidebar() {
       ? teamLeaderSidebarItems
       : isAccountant 
         ? accountantSidebarItems 
-        : employeeSidebarItems;
+        : employeeSidebarItems
+          ? factoryManagementSidebarItems
+            : employeeSidebarItems;
 
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 bg-white border-r">

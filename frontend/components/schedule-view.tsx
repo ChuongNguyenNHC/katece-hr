@@ -35,7 +35,7 @@ export function ScheduleView() {
   return (
     <div className="rounded-3xl bg-blue-600 p-6 text-white shadow-lg shadow-blue-200">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-xl font-bold">Upcoming Shifts</h2>
+        <h2 className="text-xl font-bold">Ca làm sắp tới</h2>
         <div className="flex gap-2">
           <Button
             size="icon"
@@ -64,13 +64,13 @@ export function ScheduleView() {
         
         <div className="snap-start">
             <ShiftCard 
-                dateTag="Today"
+                dateTag="Hôm nay"
                 dateTagColor="emerald"
-                title="Morning Shift"
-                role="Front Desk Reception"
+                title="Ca Sáng"
+                role="Công nhân may"
                 dateNumber="17"
-                time="08:00 AM - 04:00 PM"
-                location="Main Office, Floor 1"
+                time="08:00 - 16:00"
+                location="KCN Mỹ Phước 3, Bình Dương"
                 status="active"
                 onCheckIn={openCheckIn}
                 onCheckOut={openCheckOut}
@@ -79,26 +79,26 @@ export function ScheduleView() {
 
         <div className="snap-start">
             <ShiftCard 
-                dateTag="Tomorrow"
+                dateTag="Ngày mai"
                 dateTagColor="blue"
-                title="Afternoon Shift"
-                role="Support Team Lead"
+                title="Ca Chiều"
+                role="Kiểm hàng"
                 dateNumber="18"
-                time="01:00 PM - 09:00 PM"
-                location="Remote / Online"
+                time="13:00 - 21:00"
+                location="KCN Mỹ Phước 3, Bình Dương"
                 status="upcoming"
             />
         </div>
 
         <div className="snap-start">
             <ShiftCard 
-                dateTag="Tomorrow"
+                dateTag="Ngày mai"
                 dateTagColor="blue"
-                title="Afternoon Shift"
-                role="Support Team Lead"
+                title="Ca Chiều"
+                role="Kiểm hàng"
                 dateNumber="18"
-                time="01:00 PM - 09:00 PM"
-                location="Remote / Online"
+                time="13:00 - 21:00"
+                location="KCN Mỹ Phước 3, Bình Dương"
                 status="upcoming"
             />
         </div>

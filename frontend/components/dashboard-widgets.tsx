@@ -10,7 +10,7 @@ export function DashboardWidgets() {
         <div>
           <div className="text-3xl font-bold text-amber-600">3</div>
           <div className="text-sm font-medium text-gray-600">
-            Pending Tasks
+            Yêu cầu đang xử lý
           </div>
         </div>
       </div>
@@ -22,7 +22,7 @@ export function DashboardWidgets() {
         <div>
           <div className="text-3xl font-bold text-blue-600">120</div>
           <div className="text-sm font-medium text-gray-600">
-            Hours Worked
+            Giờ làm việc
           </div>
         </div>
       </div>

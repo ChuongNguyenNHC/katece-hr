@@ -53,7 +53,7 @@ export function AvailabilityModal({ isOpen, onClose }: AvailabilityModalProps) {
         <div className="flex items-center justify-between bg-blue-600 px-6 py-4 text-white">
           <h2 className="text-xl font-bold flex items-center gap-2">
              <X className="h-6 w-6 cursor-pointer hover:opacity-80" onClick={onClose} />
-             Set up schedule
+             Đăng ký lịch làm việc
           </h2>
         </div>
 
@@ -61,7 +61,7 @@ export function AvailabilityModal({ isOpen, onClose }: AvailabilityModalProps) {
         <div className="flex-1 overflow-auto bg-white relative">
              <div className="min-w-max">
                  {/* Header Row: Dates */}
-                <div className="sticky top-0 z-20 flex bg-white border-b shadow-sm">
+                 <div className="sticky top-0 z-20 flex bg-white border-b shadow-sm">
                     <div className="sticky left-0 z-30 w-20 bg-white border-r shrink-0"></div> {/* Corner */}
                     {dates.map((d, i) => (
                         <div key={i} className="flex w-16 flex-col items-center justify-center py-3 border-r">
@@ -111,15 +111,15 @@ export function AvailabilityModal({ isOpen, onClose }: AvailabilityModalProps) {
         <div className="bg-gray-100 px-6 py-4 flex items-center justify-center gap-8 border-t text-sm font-medium text-gray-700">
              <div className="flex items-center gap-2">
                  <div className="h-3 w-3 rounded-full bg-purple-500"></div>
-                 <span>Waiting</span>
+                 <span>Chờ duyệt</span>
              </div>
              <div className="flex items-center gap-2">
                  <div className="h-3 w-3 rounded-full bg-blue-500"></div>
-                 <span>Accepted</span>
+                 <span>Đã duyệt</span>
              </div>
              <div className="flex items-center gap-2">
                  <div className="h-3 w-3 rounded-full bg-emerald-500"></div>
-                 <span>Selected</span>
+                 <span>Đã chọn</span>
              </div>
         </div>
       </div>

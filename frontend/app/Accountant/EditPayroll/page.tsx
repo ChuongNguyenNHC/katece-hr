@@ -5,87 +5,12 @@ import { Badge } from "@/components/ui/badge";
 import { Eye, Edit } from "lucide-react";
 import { useState } from "react";
 import dynamic from "next/dynamic";
+import { mockSalaries } from "@/lib/mock-data";
+import type { Bangluong } from "@/types/schema";
 const EditPayrollPopup = dynamic(() => import("@/components/Accountant/EditPayrollPopup"), { ssr: false });
 
-type PayrollRow = {
-  name: string;
-  month: string;
-  year: string;
-  salary: string;
-  otHours: string;
-  paidLeave: string;
-  unpaidLeave: string;
-  otPay: string;
-  allowance: string;
-  bonus: string;
-  deduction: string;
-  total: string;
-  status: string;
-};
-
-// dữ liệu bảng lương mẫu
-const payrollData: PayrollRow[] = [
-  {
-    name: "Nguyễn Văn A",
-    month: "11",
-    year: "2025",
-    salary: "18,000,000₫",
-    otHours: "-",
-    paidLeave: "-",
-    unpaidLeave: "-",
-    otPay: "-",
-    allowance: "-",
-    bonus: "-",
-    deduction: "-",
-    total: "-",
-    status: "Chờ xử lý",
-  },
-  {
-    name: "Nguyễn Văn B",
-    month: "12",
-    year: "2025",
-    salary: "18,000,000₫",
-    otHours: "-",
-    paidLeave: "-",
-    unpaidLeave: "-",
-    otPay: "-",
-    allowance: "-",
-    bonus: "-",
-    deduction: "-",
-    total: "-",
-    status: "Chờ xử lý",
-  },
-  {
-    name: "Trần Thị C",
-    month: "12",
-    year: "2024",
-    salary: "20,000,000₫",
-    otHours: "10",
-    paidLeave: "2",
-    unpaidLeave: "0",
-    otPay: "2,000,000₫",
-    allowance: "1,000,000₫",
-    bonus: "500,000₫",
-    deduction: "100,000₫",
-    total: "23,400,000₫",
-    status: "Đã xử lý",
-  },
-  {
-    name: "Lê Văn D",
-    month: "11",
-    year: "2025",
-    salary: "19,000,000₫",
-    otHours: "5",
-    paidLeave: "1",
-    unpaidLeave: "0",
-    otPay: "1,000,000₫",
-    allowance: "500,000₫",
-    bonus: "200,000₫",
-    deduction: "50,000₫",
-    total: "20,650,000₫",
-    status: "Đã trả",
-  },
-];
+// Dữ liệu bảng lương lấy từ mock-data
+const payrollData = mockSalaries;
 // Hàm lấy class màu theo trạng thái
 function getStatusColor(status: string) {
   switch (status) {
@@ -101,46 +26,56 @@ function getStatusColor(status: string) {
 }
 
 export default function EditPayrollPage() {
-    const [selectedMonth, setSelectedMonth] = useState("");
-    const [selectedYear, setSelectedYear] = useState("");
-    const [selectedStatus, setSelectedStatus] = useState("");
-    const [popupOpen, setPopupOpen] = useState(false);
-    const [editRow, setEditRow] = useState<PayrollRow | null>(null);
-    const [data, setData] = useState<PayrollRow[]>(payrollData);
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [editRow, setEditRow] = useState<Bangluong | null>(null);
+  const [data, setData] = useState<Bangluong[]>(payrollData);
 
-    // Các giá trị tháng, năm, trạng thái để lọc
-    const months = ["", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
-    const years = ["", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026"];
-    const statuses = ["", "Đã trả", "Chờ xử lý", "Đã xử lý"];
-    // Lọc theo tháng, năm, trạng thái nếu có chọn, nếu không thì hiển thị toàn bộ
-    const filteredData = data.filter(row => {
-      const matchMonth = selectedMonth ? row.month === selectedMonth : true;
-      const matchYear = selectedYear ? row.year === selectedYear : true;
-      const matchStatus = selectedStatus ? row.status === selectedStatus : true;
-      return matchMonth && matchYear && matchStatus;
-    });
+  // Các giá trị tháng, năm, trạng thái để lọc
+  const months = ["", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+  const years = ["", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026"];
+  const statuses = ["", "Đã trả", "Chờ xử lý", "Đã xử lý"];
+  // Lọc theo tháng, năm, trạng thái nếu có chọn, nếu không thì hiển thị toàn bộ
+  const filteredData = data.filter(row => {
+    let month = "";
+    let year = "";
+    if (row.thangLuong) {
+      // thangLuong dạng yyyy-mm-dd
+      const parts = row.thangLuong.split("-");
+      if (parts.length >= 2) {
+        year = parts[0];
+        month = parts[1];
+      }
+    }
+    const matchMonth = selectedMonth ? month === selectedMonth : true;
+    const matchYear = selectedYear ? year === selectedYear : true;
+    const matchStatus = selectedStatus ? row.trangThaiDuyetLuong === selectedStatus : true;
+    return matchMonth && matchYear && matchStatus;
+  });
 
-    const [editIndex, setEditIndex] = useState<number | null>(null);
-    const handleEdit = (row: PayrollRow, idx?: number) => {
-      setEditRow({ ...row });
-      setEditIndex(typeof idx === 'number' ? idx : null);
-      setPopupOpen(true);
-    };
+  const [editIndex, setEditIndex] = useState<number | null>(null);
+  const handleEdit = (row: Bangluong, idx?: number) => {
+    setEditRow({ ...row });
+    setEditIndex(typeof idx === 'number' ? idx : null);
+    setPopupOpen(true);
+  };
 
-    const handleSave = (newRow: PayrollRow) => {
-      setData(prev =>
-        prev.map((r, idx) =>
-          idx === editIndex ? newRow : r
-        )
-      );
-      setPopupOpen(false);
-    };
+  const handleSave = (newRow: Bangluong) => {
+    setData(prev =>
+      prev.map((r, idx) =>
+        idx === editIndex ? newRow : r
+      )
+    );
+    setPopupOpen(false);
+  };
 
-    const handleClose = () => {
-      setPopupOpen(false);
-    };
+  const handleClose = () => {
+    setPopupOpen(false);
+  };
 
-    return (
+  return (
     <div className="space-y-6">
 
       <div>
@@ -191,7 +126,7 @@ export default function EditPayrollPage() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Thao tác</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Trạng thái</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Họ tên</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap ">Tháng/Năm</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap ">Tháng lương</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Lương cơ bản</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Số giờ OT</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Số ngày nghỉ có phép</th>
@@ -203,8 +138,6 @@ export default function EditPayrollPage() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Tổng lương</th>
             </tr>
           </thead>
-        
-            {/* thân bảng */}
           <tbody className="divide-y divide-gray-200">
             {filteredData.length === 0 ? (
               <tr>
@@ -212,30 +145,29 @@ export default function EditPayrollPage() {
               </tr>
             ) : (
               filteredData.map((row, idx) => (
-                <tr key={row.name + row.month + idx}>
+                <tr key={row.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <Button variant="default" size="sm" className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700" onClick={() => handleEdit(row, data.findIndex(r => r.name === row.name && r.month === row.month && r.year === row.year))}>
+                    <Button variant="default" size="sm" className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700" onClick={() => handleEdit(row, data.findIndex(r => r.id === row.id))}>
                       <Edit className="h-4 w-4" />
                     </Button>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <Badge className={getStatusColor(row.status)}>{row.status}</Badge>
+                    <Badge className={getStatusColor(row.trangThaiDuyetLuong || "")}>{row.trangThaiDuyetLuong}</Badge>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap font-semibold">{row.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{row.month}/{row.year}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{row.salary}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{row.otHours}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{row.paidLeave}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{row.unpaidLeave}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{row.otPay}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{row.allowance}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{row.bonus}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{row.deduction}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{row.total}</td>
+                  <td className="px-6 py-4 whitespace-nowrap font-semibold">{row.TAIKHOAN?.fullName || row.maNguoiDung}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{row.thangLuong}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{row.luongCoBan?.toLocaleString('vi-VN')}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{row.soGioOT}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{row.soNgayNghiCoPhep}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{row.soNgayNghiKhongPhep}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{row.tienOT?.toLocaleString('vi-VN')}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{row.phuCap?.toLocaleString('vi-VN')}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{row.tienThuong?.toLocaleString('vi-VN')}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{row.khauTru?.toLocaleString('vi-VN')}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{row.tongLuong?.toLocaleString('vi-VN')}</td>
                 </tr>
               ))
             )}
-
           </tbody>
         </table>
       </div>

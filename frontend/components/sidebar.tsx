@@ -28,12 +28,14 @@ type SidebarItem = {
   count?: number | null;
 };
 
+// Công nhân
 const employeeSidebarItems: SidebarItem[] = [
   { icon: Home, label: "Trang chủ", href: "/employee/dashboard" },
   { icon: Calendar, label: "Lịch làm việc", href: "/employee/schedule" },
   { icon: User, label: "Hồ sơ", href: "/employee/profile" },
 ];
 
+// Nhân sự
 const hrSidebarItems: SidebarItem[] = [
   { icon: LayoutDashboard, label: "Tổng quan", href: "/hr/dashboard" },
   { icon: Users, label: "Nhân sự", href: "/hr/employees" },
@@ -42,6 +44,7 @@ const hrSidebarItems: SidebarItem[] = [
   { icon: Package, label: "Sản phẩm", href: "/hr/products" },
 ];
 
+// Tổ trưởng
 const teamLeaderSidebarItems: SidebarItem[] = [
   { icon: LayoutDashboard, label: "Tổng quan", href: "/team-leader/dashboard" },
   { icon: Users, label: "Quản lý lịch làm", href: "/team-leader/manage-schedule" },
@@ -50,8 +53,10 @@ const teamLeaderSidebarItems: SidebarItem[] = [
   { icon: Package, label: "Yêu cầu vật tư", href: "/team-leader/material-requests" },
 ];
 
+// Kế toán
 const accountantSidebarItems: SidebarItem[] = [
   { icon: SquarePen, label: "Bảng lương", href: "/Accountant/EditPayroll" },
+  { icon: MessageSquare, label: "Phản hồi lương", href: "/Accountant/EditPayrollRequests", count: 2 },
 ];
 
 // Removed "Requests" and "Settings" from here as per previous tasks

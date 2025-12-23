@@ -117,7 +117,7 @@ export default function TeamLeaderRequestsPage() {
 
         {filteredItems.length === 0 && (
             <div className="text-center py-12 bg-white rounded-xl border border-dashed">
-                <p className="text-gray-500">Uy tín! Không có yêu cầu nào cần xử lý.</p>
+                <p className="text-gray-500">Không có yêu cầu nào cần xử lý.</p>
             </div>
         )}
       </div>

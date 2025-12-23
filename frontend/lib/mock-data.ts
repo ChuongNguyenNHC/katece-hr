@@ -243,7 +243,7 @@ export const mockSalaries: Bangluong[] = [
     {
         id: "bl1",
         created_at: "2023-11-25",
-        thangLuong: "2023-11-01",
+        thangLuong: "2024-12-01",
         maNguoiDung: "1", // Alex
         luongCoBan: 6500000,
         tienOT: 500000,
@@ -251,7 +251,7 @@ export const mockSalaries: Bangluong[] = [
         tienThuong: 300000,
         khauTru: 150000,
         tongLuong: 8150000,
-        trangThaiDuyetLuong: "approved",
+        trangThaiDuyetLuong: "Đã xử lý",
         TAIKHOAN: mockEmployees.find(e => e.id === "1"),
         soNgayNghiCoPhep: 1,
         soNgayNghiKhongPhep: 0,
@@ -261,7 +261,7 @@ export const mockSalaries: Bangluong[] = [
     {
         id: "bl2",
         created_at: "2023-11-25",
-        thangLuong: "2023-11-01",
+        thangLuong: "2024-12-01",
         maNguoiDung: "2", // Sarah
         luongCoBan: 12000000,
         tienOT: 0,
@@ -269,7 +269,7 @@ export const mockSalaries: Bangluong[] = [
         tienThuong: 1500000,
         khauTru: 200000,
         tongLuong: 15300000,
-        trangThaiDuyetLuong: "pending",
+        trangThaiDuyetLuong: "Đã trả",
         TAIKHOAN: mockEmployees.find(e => e.id === "2"),
          soNgayNghiCoPhep: 0,
         soNgayNghiKhongPhep: 0,
@@ -287,7 +287,7 @@ export const mockSalaries: Bangluong[] = [
         tienThuong: 200000,
         khauTru: 0,
         tongLuong: 7500000,
-        trangThaiDuyetLuong: "pending", // Pending for Team Leader approval
+        trangThaiDuyetLuong: "Chờ xử lý", // Pending for Team Leader approval
         TAIKHOAN: mockEmployees.find(e => e.id === "1"),
         soNgayNghiCoPhep: 0,
         soNgayNghiKhongPhep: 0,
@@ -305,7 +305,7 @@ export const mockSalaries: Bangluong[] = [
         tienThuong: 0,
         khauTru: 100000,
         tongLuong: 7650000,
-        trangThaiDuyetLuong: "pending",
+        trangThaiDuyetLuong: "Chờ xử lý",
         TAIKHOAN: mockEmployees.find(e => e.id === "3"),
         soNgayNghiCoPhep: 1,
         soNgayNghiKhongPhep: 0,
@@ -323,6 +323,7 @@ export const mockFeedbacks: Phanhoiluong[] = [
         phieuLuongID: "bl1",
         noiDung: "Giờ tăng ca ngày Chủ nhật tính chưa đúng.",
         trangThaiPhanHoi: "processing",
+        trangThaiDuyet: "teamLeaderApproved",
         nguoiDuyetID: "2"
     },
     {
@@ -332,6 +333,7 @@ export const mockFeedbacks: Phanhoiluong[] = [
         phieuLuongID: "bl4",
         noiDung: "Thiếu tiền phụ cấp cơm trưa.",
         trangThaiPhanHoi: "resolved", // Resolved
+        trangThaiDuyet: "teamLeaderApproved",
         nguoiDuyetID: "2"
     },
     {
@@ -341,6 +343,7 @@ export const mockFeedbacks: Phanhoiluong[] = [
         phieuLuongID: "bl_new", 
         noiDung: "Sao tháng này bị trừ tiền phạt?",
         trangThaiPhanHoi: "processing",
+        trangThaiDuyet: "teamLeaderPending",
         nguoiDuyetID: "5" // Team Leader E
     }
 ];

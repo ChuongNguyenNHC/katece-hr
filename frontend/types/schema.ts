@@ -238,14 +238,15 @@ export interface Yeucaunghi {
 }
 
 export interface Phanhoiluong {
-    id: string;
-    created_at: string;
-    noiDung?: string;
-    trangThaiPhanHoi?: string;
-    nguoiDuyetID?: string;
-    nguoiGuiID?: string;
-    nguoiXuLyID?: string;
-    phieuLuongID?: string;
+  id: string;
+  created_at: string;
+  noiDung?: string;
+  trangThaiPhanHoi?: string;
+  trangThaiDuyet?: string; // Thêm trường trạng thái duyệt riêng
+  nguoiDuyetID?: string;
+  nguoiGuiID?: string;
+  nguoiXuLyID?: string;
+  phieuLuongID?: string;
 }
 
 export interface Vatlieu {

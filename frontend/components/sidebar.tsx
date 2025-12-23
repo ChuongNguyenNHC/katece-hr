@@ -68,6 +68,12 @@ const factoryManagementSidebarItems: SidebarItem[] = [
   { icon: LayoutDashboard, label: "Quản lý nhân viên", href: "/FactoryManager/WorkerManagement" },
 ];
 
+// Kho
+const warehouseSidebarItems: SidebarItem[] = [
+  { icon: LayoutDashboard, label: "Vật liệu", href: "/warehouse/materials" },
+  { icon: Package, label: "Yêu cầu vật liệu", href: "/warehouse/requests" },
+];
+
 // Removed "Requests" and "Settings" from here as per previous tasks
 const secondaryItems: SidebarItem[] = [];
 
@@ -78,6 +84,7 @@ export function Sidebar() {
   const isEmployee = pathname.startsWith("/employee");
   const isAccountant = pathname.startsWith("/Accountant");
   const isFactoryManager = pathname.startsWith("/FactoryManager");
+  const isWarehouse = pathname.startsWith("/warehouse");
 
   const sidebarItems = isHr 
     ? hrSidebarItems 
@@ -85,9 +92,13 @@ export function Sidebar() {
       ? teamLeaderSidebarItems
       : isAccountant 
         ? accountantSidebarItems 
-        : employeeSidebarItems
-          ? factoryManagementSidebarItems
-            : employeeSidebarItems;
+        : isEmployee
+          ? employeeSidebarItems
+          : isFactoryManager
+            ? factoryManagementSidebarItems
+            : isWarehouse
+              ? warehouseSidebarItems
+              : employeeSidebarItems;
 
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 bg-white border-r">

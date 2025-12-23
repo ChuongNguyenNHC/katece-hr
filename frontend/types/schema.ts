@@ -1,3 +1,4 @@
+export type TrangThaiVatLieu = 'conHang' | 'sapHet' | 'hetHang' | 'ngungSuDung';
 export type TrangThaiTaiKhoan = 'active' | 'inactive';
 export type TrangThaiHopDong = 'active' | 'inactive';
 export type TrangThaiDonOT = 'processing' | 'approved' | 'declined';
@@ -242,7 +243,7 @@ export interface Phanhoiluong {
   created_at: string;
   noiDung?: string;
   trangThaiPhanHoi?: string;
-  trangThaiDuyet?: string; // Thêm trường trạng thái duyệt riêng
+  trangThaiDuyet?: string;
   nguoiDuyetID?: string;
   nguoiGuiID?: string;
   nguoiXuLyID?: string;
@@ -250,11 +251,34 @@ export interface Phanhoiluong {
 }
 
 export interface Vatlieu {
-    id: string;
-    tenVatLieu?: string;
-    soLuongTon?: number;
-    donViTinh?: string;
-    nhaCungCapID?: string;
+  id: string;
+  tenVatLieu?: string;
+  soLuongTon?: number;
+  donViTinh?: string;
+  nhaCungCapID?: string;
+  trangThai?: TrangThaiVatLieu;
+  CHITIETYEUCAUVATLIEU?: Chitietyeucauvatlieu[];
+}
+
+export interface Yeucauvatlieu {
+  id: string;
+  created_at: string;
+  trangThaiYeuCau?: string;
+  toSanXuatID?: string; // Tổ sản xuất gửi yêu cầu
+  nguoiGuiID?: string; // Người gửi yêu cầu
+  nguoiDuyetID?: string; // Người duyệt yêu cầu
+  CHITIETYEUCAUVATLIEU?: Chitietyeucauvatlieu[];
+}
+
+
+export interface Chitietyeucauvatlieu {
+  id: string;
+  vatLieuID: string;
+  yeuCauVatLieuID: string;
+  soLuong: number;
+  ghiChu?: string;
+  VATLIEU?: Vatlieu;
+  YEUCAUVATLIEU?: Yeucauvatlieu;
 }
 
 export interface Nhacungcap {

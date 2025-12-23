@@ -10,7 +10,12 @@ import {
   Phanhoiluong,
   Chamcong,
   Tosanxuat,
-} from '@/types/schema';
+  Chitietyeucauvatlieu, 
+  Vatlieu, 
+  Yeucauvatlieu } 
+from '@/types/schema';
+
+
 
 // Mock Teams (Tosanxuat)
 export const mockTeams: Tosanxuat[] = [
@@ -516,5 +521,87 @@ export const mockAttendance: Chamcong[] = [
         nhanVienID: "2"
     }
 ];
+// Mock Material Requests (Yeucauvatlieu)
+export const mockMaterialRequests: Yeucauvatlieu[] = [
+  {
+    id: "ycvl1",
+    created_at: "2023-12-01T08:00:00Z",
+    trangThaiYeuCau: "pending",
+    toSanXuatID: mockTeams.filter(ct => ct.tenTo === "Tổ May 1")[0].id, // Tổ May 1
+    nguoiGuiID: mockEmployees.find(e => e.position === "Tổ trưởng")?.id,
+    nguoiDuyetID: mockEmployees.find(e => e.position === "Kho")?.id,
+  },
+  {
+    id: "ycvl2",
+    created_at: "2023-12-02T09:00:00Z",
+    trangThaiYeuCau: "approved",
+    toSanXuatID: mockTeams.filter(ct => ct.tenTo === "Tổ Hoàn Thiện")[0].id, // Tổ Hoàn Thiện
+    nguoiGuiID: mockEmployees.find(e => e.position === "Tổ trưởng")?.id,
+    nguoiDuyetID: mockEmployees.find(e => e.position === "Kho")?.id,
+  },
+];
 
+// Mock Chitietyeucauvatlieu (Material Request Details)
+export const mockChitietyeucauvatlieu: Chitietyeucauvatlieu[] = [
+  {
+    id: "ctycvl1",
+    vatLieuID: "vl1",
+    yeuCauVatLieuID: "ycvl1",
+    soLuong: 100,
+    ghiChu: "Cần gấp cho đơn hàng A",
+  },
+  {
+    id: "ctycvl2",
+    vatLieuID: "vl2",
+    yeuCauVatLieuID: "ycvl1",
+    soLuong: 50,
+    ghiChu: "Dùng cho sản xuất tháng 12",
+  },
+  {
+    id: "ctycvl3",
+    vatLieuID: "vl3",
+    yeuCauVatLieuID: "ycvl2",
+    soLuong: 200,
+    ghiChu: "",
+  },
+];
+
+export const mockMaterials: Vatlieu[] = [
+  {
+    id: "vl1",
+    tenVatLieu: "Vải cotton",
+    soLuongTon: 500,
+    donViTinh: "mét",
+    nhaCungCapID: "ncc1",
+    trangThai: "conHang",
+    CHITIETYEUCAUVATLIEU: mockChitietyeucauvatlieu.filter(ct => ct.vatLieuID === "vl1"),
+  },
+  {
+    id: "vl2",
+    tenVatLieu: "Chỉ may",
+    soLuongTon: 2000,
+    donViTinh: "cuộn",
+    nhaCungCapID: "ncc2",
+    trangThai: "conHang",
+    CHITIETYEUCAUVATLIEU: mockChitietyeucauvatlieu.filter(ct => ct.vatLieuID === "vl2"),
+  },
+  {
+    id: "vl3",
+    tenVatLieu: "Khuy áo",
+    soLuongTon: 10000,
+    donViTinh: "cái",
+    nhaCungCapID: "ncc1",
+    trangThai: "sapHet",
+    CHITIETYEUCAUVATLIEU: mockChitietyeucauvatlieu.filter(ct => ct.vatLieuID === "vl3"),
+  },
+  {
+    id: "vl4",
+    tenVatLieu: "Dây kéo",
+    soLuongTon: 800,
+    donViTinh: "cái",
+    nhaCungCapID: "ncc3",
+    trangThai: "hetHang",
+    CHITIETYEUCAUVATLIEU: [],
+  }
+];
 

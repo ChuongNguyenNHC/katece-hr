@@ -30,7 +30,7 @@ const employeeSidebarItems: SidebarItem[] = [
 ];
 
 const accountantSidebarItems: SidebarItem[] = [
-  { icon: SquarePen, label: "Edit Payroll", href: "/Accountant/EditPayroll" },
+  { icon: SquarePen, label: "Bảng lương", href: "/Accountant/EditPayroll" },
 ];
 
 const secondaryItems: SidebarItem[] = [
@@ -53,7 +53,7 @@ export function Sidebar() {
         <div className="mb-8 flex items-center gap-2 px-2">
             <div className="relative h-12 w-full flex items-center">
              <span className="text-2xl font-extrabold text-blue-950 flex items-center">
-                <span className="text-blue-600 mr-1">Nexus</span>
+                <span className="text-blue-600 mr-1">Kace</span>
                 <span className="bg-blue-600 text-white rounded-md px-2 py-0.5 text-sm ml-1 font-bold">HR</span>
              </span>
             </div>

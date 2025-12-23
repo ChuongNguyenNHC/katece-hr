@@ -48,15 +48,7 @@ const accountantSidebarItems: SidebarItem[] = [
 ];
 
 // Removed "Requests" and "Settings" from here as per previous tasks
-const secondaryItems: SidebarItem[] = [
-  { icon: MessageSquare, label: "Hỗ trợ", href: "/employee/support" },
-  {
-    icon: Bell,
-    label: "Thông báo",
-    href: "/employee/notifications",
-    count: 2,
-  },
-];
+const secondaryItems: SidebarItem[] = [];
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -112,28 +104,7 @@ export function Sidebar() {
 
         {/* Secondary Navigation */}
         <div className="mt-8 border-t pt-4 space-y-2">
-          {secondaryItems.map((item) => {
-             const isActive = pathname === item.href;
-             return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                  "flex items-center gap-4 rounded-lg px-4 py-3 text-sm font-medium transition-colors",
-                  isActive
-                    ? "bg-blue-50 text-blue-600"
-                    : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
-                )}
-            >
-              <item.icon className="h-5 w-5 text-gray-400" />
-              <span className="flex-1">{item.label}</span>
-              {typeof item.count === "number" && item.count > 0 && (
-                <span className="flex px-2 py-0.5 items-center justify-center rounded-full bg-blue-600 text-xs text-white">
-                  {item.count}
-                </span>
-              )}
-            </Link>
-          )})}
+            {/* Empty for now */}
         </div>
 
         {/* User Profile */}

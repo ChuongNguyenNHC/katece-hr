@@ -324,6 +324,24 @@ export const mockFeedbacks: Phanhoiluong[] = [
         noiDung: "Giờ tăng ca ngày Chủ nhật tính chưa đúng.",
         trangThaiPhanHoi: "processing",
         nguoiDuyetID: "2"
+    },
+    {
+        id: "ph2",
+        created_at: "2023-11-27",
+        nguoiGuiID: "3", // Le Van C
+        phieuLuongID: "bl4",
+        noiDung: "Thiếu tiền phụ cấp cơm trưa.",
+        trangThaiPhanHoi: "resolved", // Resolved
+        nguoiDuyetID: "2"
+    },
+    {
+        id: "ph3",
+        created_at: "2023-12-01",
+        nguoiGuiID: "4", // Pham Thi D
+        phieuLuongID: "bl_new", 
+        noiDung: "Sao tháng này bị trừ tiền phạt?",
+        trangThaiPhanHoi: "processing",
+        nguoiDuyetID: "5" // Team Leader E
     }
 ];
 
@@ -348,6 +366,36 @@ export const mockRequests: Yeucauot[] = [
     ngayOT: "2023-10-27",
     trangThaiDonOT: "approved",
     NguoiGui: mockEmployees.find(e => e.id === "3"),
+  },
+  {
+    id: "r3",
+    created_at: "2023-12-20T08:00:00Z",
+    soGioOT: 3,
+    ngayGui: "2023-12-20",
+    ngayOT: "2023-12-21",
+    trangThaiDonOT: "processing", // Pending
+    nguoiGuiID: "3", // Le Van C
+    NguoiGui: mockEmployees.find(e => e.id === "3"),
+  },
+  {
+    id: "r4",
+    created_at: "2023-12-22T09:30:00Z",
+    soGioOT: 5,
+    ngayGui: "2023-12-22",
+    ngayOT: "2023-12-24",
+    trangThaiDonOT: "declined", // Rejected
+    nguoiGuiID: "4", // Pham Thi D
+    NguoiGui: mockEmployees.find(e => e.id === "4"),
+  },
+  {
+    id: "r5",
+    created_at: "2023-12-23T07:15:00Z",
+    soGioOT: 2,
+    ngayGui: "2023-12-23",
+    ngayOT: "2023-12-25",
+    trangThaiDonOT: "processing",
+    nguoiGuiID: "1", // Nguyen Van A
+    NguoiGui: mockEmployees.find(e => e.id === "1"),
   }
 ];
 

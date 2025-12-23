@@ -31,6 +31,49 @@ export const mockTeams: Tosanxuat[] = [
 // Mock Employees (Taikhoan)
 export const mockEmployees: Taikhoan[] = [
   {
+    id: "6",
+    username: "ketoan01",
+    fullName: "Nguyễn Thị Kế Toán",
+    position: "Kế toán",
+    phone: "0901234572",
+    cccd: "012345678906",
+    email: "ketoan@katece.com",
+    createdAt: "2023-06-01T09:00:00Z",
+    trangThaiTaiKhoan: "active",
+    paidLeaveDayss: 10,
+    unpaidLeaveDays: 0,
+    toSanXuatID: undefined,
+  },
+  {
+    id: "7",
+    username: "toTruong01",
+    fullName: "Phạm Văn Tổ Trưởng",
+    position: "Tổ trưởng",
+    phone: "0901234573",
+    cccd: "012345678907",
+    email: "totruong@katece.com",
+    createdAt: "2023-07-01T09:00:00Z",
+    trangThaiTaiKhoan: "active",
+    paidLeaveDayss: 8,
+    unpaidLeaveDays: 0,
+    toSanXuatID: "t1",
+    TOSANXUAT: mockTeams[0],
+  },
+  {
+    id: "8",
+    username: "kho01",
+    fullName: "Lê Thị Kho",
+    position: "Kho",
+    phone: "0901234574",
+    cccd: "012345678908",
+    email: "kho@katece.com",
+    createdAt: "2023-08-01T09:00:00Z",
+    trangThaiTaiKhoan: "active",
+    paidLeaveDayss: 7,
+    unpaidLeaveDays: 1,
+    toSanXuatID: undefined,
+  },
+  {
     id: "1",
     username: "ajohnson",
     fullName: "Nguyễn Văn A",
@@ -377,8 +420,8 @@ export const mockRequests: Yeucauot[] = [
     ngayGui: "2023-12-20",
     ngayOT: "2023-12-21",
     trangThaiDonOT: "processing", // Pending
-    nguoiGuiID: "3", // Le Van C
-    NguoiGui: mockEmployees.find(e => e.id === "3"),
+    nguoiGuiID: "6", // Le Van C
+    NguoiGui: mockEmployees.find(e => e.id === "6"),
   },
   {
     id: "r4",

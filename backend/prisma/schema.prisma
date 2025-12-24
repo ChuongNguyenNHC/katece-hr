@@ -7,17 +7,328 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String   @id @default(uuid())   // Mã TK (UUID)
-  username  String   @unique                // Tên TK
-  fullName  String                           // Họ và tên
-  position  String                           // Chức vụ
-  status    String   @default("active")     // Trạng thái
-  phone     String                           // Số điện thoại
-  cccd      String   @unique                // CCCD
-  email     String   @unique                // Email
-  createdAt DateTime @default(now())        // Ngày tạo
-  password  String
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model BANGLUONG {
+  id                                           String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at                                   DateTime       @default(now()) @db.Timestamptz(6)
+  thangLuong                                   DateTime?      @db.Date
+  luongCoBan                                   Decimal?       @db.Decimal
+  tienOT                                       Decimal?       @db.Decimal
+  phuCap                                       Decimal?       @db.Decimal
+  tienThuong                                   Decimal?       @db.Decimal
+  khauTru                                      Decimal?       @db.Decimal
+  tongLuong                                    Decimal?       @db.Decimal
+  trangThaiDuyetLuong                          String?
+  keToanID                                     String?        @db.Uuid
+  maNguoiDung                                  String?        @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  soNgayNghiCoPhep                             Int?           @db.SmallInt
+  soNgayNghiKhongPhep                          Int?           @db.SmallInt
+  soGioOT                                      Int?           @db.SmallInt
+  maNguoiChinhSua                              String?        @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  TAIKHOAN_BANGLUONG_maNguoiChinhSuaToTAIKHOAN TAIKHOAN?      @relation("BANGLUONG_maNguoiChinhSuaToTAIKHOAN", fields: [maNguoiChinhSua], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  TAIKHOAN_BANGLUONG_maNguoiDungToTAIKHOAN     TAIKHOAN?      @relation("BANGLUONG_maNguoiDungToTAIKHOAN", fields: [maNguoiDung], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  PHANHOILUONG                                 PHANHOILUONG[]
+}
 
-  @@map("users")
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model CHAMCONG {
+  id             String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at     DateTime        @default(now()) @db.Timestamptz(6)
+  checkInTime    DateTime?       @db.Timestamptz(6)
+  checkOutTime   DateTime?       @db.Timestamptz(6)
+  soGioLam       Decimal?        @db.Decimal
+  lichLamID      String?         @db.Uuid
+  nhanVienID     String?         @db.Uuid
+  CHITIETLICHLAM CHITIETLICHLAM? @relation(fields: [lichLamID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  TAIKHOAN       TAIKHOAN?       @relation(fields: [nhanVienID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model CHITIETLICHLAM {
+  id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at DateTime   @default(now()) @db.Timestamptz(6)
+  ngayLam    DateTime?  @db.Date
+  nhanVienID String?    @db.Uuid
+  lichLamID  String?    @db.Uuid
+  CHAMCONG   CHAMCONG[]
+  LICHLAM    LICHLAM?   @relation(fields: [lichLamID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  TAIKHOAN   TAIKHOAN?  @relation(fields: [nhanVienID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model CHITIETYEUCAUVATLIEU {
+  id              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at      DateTime       @default(now()) @db.Timestamptz(6)
+  yeuCauVatLieuID String?        @db.Uuid
+  vatLieuID       String?        @db.Uuid
+  soLuong         Int?
+  ghiChu          String?
+  VATLIEU         VATLIEU?       @relation(fields: [vatLieuID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  YEUCAUVATLIEU   YEUCAUVATLIEU? @relation(fields: [yeuCauVatLieuID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model CONGDOAN {
+  id               String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at       DateTime           @default(now()) @db.Timestamptz(6)
+  tenCongDoan      String?
+  donGia           Decimal?           @db.Decimal
+  CONGDOAN_SANPHAM CONGDOAN_SANPHAM[]
+  PHANCONGSANXUAT  PHANCONGSANXUAT[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model CONGDOAN_SANPHAM {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  sanPhamID  String?   @db.Uuid
+  congDoanID String?   @db.Uuid
+  CONGDOAN   CONGDOAN? @relation(fields: [congDoanID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  SANPHAM    SANPHAM?  @relation(fields: [sanPhamID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model HOPDONGLAODONG {
+  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at    DateTime      @default(now()) @db.Timestamptz(6)
+  nhanVienID    String?       @db.Uuid
+  loaiHopDongID String?       @db.Uuid
+  tenHopDong    String?
+  loaiLuong     String?
+  giaTriLuong   Decimal?      @db.Decimal
+  ngayBatDau    DateTime?     @db.Date
+  ngayKetThuc   DateTime?     @db.Date
+  trangThaiHDLD String?
+  diaChiLamViec String?
+  LOAIHOPDONG   LOAIHOPDONG?  @relation(fields: [loaiHopDongID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  TAIKHOAN      TAIKHOAN?     @relation(fields: [nhanVienID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  LICHSULUONG   LICHSULUONG[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model HOPDONGSX {
+  id                 String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at         DateTime          @default(now()) @db.Timestamptz(6)
+  tenHopDongSX       String?
+  nhanVienID         String?           @db.Uuid
+  loaiLuong          String?
+  giaTriLuong        Decimal?          @db.Decimal
+  ngayBatDau         DateTime?         @db.Date
+  ngayKetThuc        DateTime?         @db.Date
+  trangThaiHopDongSX String?
+  tenKhachHang       String?
+  chinhSachPhat      String?
+  tienPhat           Decimal?          @db.Decimal
+  TAIKHOAN           TAIKHOAN?         @relation(fields: [nhanVienID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  PHANCONGSANXUAT    PHANCONGSANXUAT[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model LICHLAM {
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at     DateTime         @default(now()) @db.Timestamptz(6)
+  gioBatDau      DateTime?        @db.Timestamptz(6)
+  gioKetThuc     DateTime?        @db.Timestamptz(6)
+  ghiChu         String?
+  diaDiem        String?
+  trangThai      String?
+  CHITIETLICHLAM CHITIETLICHLAM[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model LICHSULUONG {
+  id             String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at     DateTime        @default(now()) @db.Timestamptz(6)
+  soTien         Decimal?        @db.Decimal
+  hopDongLDID    String?         @db.Uuid
+  HOPDONGLAODONG HOPDONGLAODONG? @relation(fields: [hopDongLDID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model LOAIHOPDONG {
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at     DateTime         @default(now()) @db.Timestamptz(6)
+  tenLoaiHopDong String?
+  nhanVienID     String?          @db.Uuid
+  loaiLuong      String?
+  giaTriLuong    Decimal?         @db.Decimal
+  ngayBatDau     DateTime?        @db.Date
+  ngayKetThuc    DateTime?        @db.Date
+  trangThaiLHD   String?
+  HOPDONGLAODONG HOPDONGLAODONG[]
+  TAIKHOAN       TAIKHOAN?        @relation(fields: [nhanVienID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model NHACUNGCAP {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at    DateTime  @default(now()) @db.Timestamptz(6)
+  password      String?
+  tenNhaCungCap String?
+  diaChi        String?
+  soDienThoai   String?   @db.VarChar
+  email         String?
+  loaiNCC       String?
+  trangThaiNCC  String?
+  VATLIEU       VATLIEU[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model PHANCONGSANXUAT {
+  id          String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at  DateTime   @default(now()) @db.Timestamptz(6)
+  hopDongID   String?    @db.Uuid
+  sanPhamID   String?    @db.Uuid
+  congDoanID  String?    @db.Uuid
+  trangThai   String?
+  toSanXuatID String?    @db.Uuid
+  CONGDOAN    CONGDOAN?  @relation(fields: [congDoanID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  HOPDONGSX   HOPDONGSX? @relation(fields: [hopDongID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  SANPHAM     SANPHAM?   @relation(fields: [sanPhamID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  TOSANXUAT   TOSANXUAT? @relation(fields: [toSanXuatID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model PHANHOILUONG {
+  id                                           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at                                   DateTime   @default(now()) @db.Timestamptz(6)
+  noiDung                                      String?
+  trangThaiPhanHoi                             String?
+  nguoiDuyetID                                 String?    @db.Uuid
+  nguoiGuiID                                   String?    @db.Uuid
+  nguoiXuLyID                                  String?    @db.Uuid
+  phieuLuongID                                 String?    @db.Uuid
+  trangThaiDuyet                               String?
+  TAIKHOAN_PHANHOILUONG_nguoiDuyetIDToTAIKHOAN TAIKHOAN?  @relation("PHANHOILUONG_nguoiDuyetIDToTAIKHOAN", fields: [nguoiDuyetID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  TAIKHOAN_PHANHOILUONG_nguoiGuiIDToTAIKHOAN   TAIKHOAN?  @relation("PHANHOILUONG_nguoiGuiIDToTAIKHOAN", fields: [nguoiGuiID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  TAIKHOAN_PHANHOILUONG_nguoiXuLyIDToTAIKHOAN  TAIKHOAN?  @relation("PHANHOILUONG_nguoiXuLyIDToTAIKHOAN", fields: [nguoiXuLyID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  BANGLUONG                                    BANGLUONG? @relation(fields: [phieuLuongID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model SANPHAM {
+  id               String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at       DateTime           @default(now()) @db.Timestamptz(6)
+  tenSP            String?
+  CONGDOAN_SANPHAM CONGDOAN_SANPHAM[]
+  PHANCONGSANXUAT  PHANCONGSANXUAT[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model TAIKHOAN {
+  id                                                   String           @id(map: "users_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  username                                             String           @unique(map: "users_username_key")
+  fullName                                             String
+  position                                             String
+  phone                                                String
+  cccd                                                 String           @unique(map: "users_cccd_key")
+  email                                                String           @unique(map: "users_email_key")
+  createdAt                                            DateTime         @default(now())
+  password                                             String
+  paidLeaveDayss                                       Int?             @db.SmallInt
+  unpaidLeaveDays                                      Int?             @db.SmallInt
+  trangThaiTaiKhoan                                    String?
+  nguoiQuanLyID                                        String?          @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  toSanXuatID                                          String?          @db.Uuid
+  BANGLUONG_BANGLUONG_maNguoiChinhSuaToTAIKHOAN        BANGLUONG[]      @relation("BANGLUONG_maNguoiChinhSuaToTAIKHOAN")
+  BANGLUONG_BANGLUONG_maNguoiDungToTAIKHOAN            BANGLUONG[]      @relation("BANGLUONG_maNguoiDungToTAIKHOAN")
+  CHAMCONG                                             CHAMCONG[]
+  CHITIETLICHLAM                                       CHITIETLICHLAM[]
+  HOPDONGLAODONG                                       HOPDONGLAODONG[]
+  HOPDONGSX                                            HOPDONGSX[]
+  LOAIHOPDONG                                          LOAIHOPDONG[]
+  PHANHOILUONG_PHANHOILUONG_nguoiDuyetIDToTAIKHOAN     PHANHOILUONG[]   @relation("PHANHOILUONG_nguoiDuyetIDToTAIKHOAN")
+  PHANHOILUONG_PHANHOILUONG_nguoiGuiIDToTAIKHOAN       PHANHOILUONG[]   @relation("PHANHOILUONG_nguoiGuiIDToTAIKHOAN")
+  PHANHOILUONG_PHANHOILUONG_nguoiXuLyIDToTAIKHOAN      PHANHOILUONG[]   @relation("PHANHOILUONG_nguoiXuLyIDToTAIKHOAN")
+  TOSANXUAT_TAIKHOAN_toSanXuatIDToTOSANXUAT            TOSANXUAT?       @relation("TAIKHOAN_toSanXuatIDToTOSANXUAT", fields: [toSanXuatID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  TOSANXUAT_TOSANXUAT_toTruongIDToTAIKHOAN             TOSANXUAT[]      @relation("TOSANXUAT_toTruongIDToTAIKHOAN")
+  YEUCAUNGHIPHEP_YEUCAUNGHIPHEP_nguoiDuyetIDToTAIKHOAN YEUCAUNGHIPHEP[] @relation("YEUCAUNGHIPHEP_nguoiDuyetIDToTAIKHOAN")
+  YEUCAUNGHIPHEP_YEUCAUNGHIPHEP_nguoiGuiIDToTAIKHOAN   YEUCAUNGHIPHEP[] @relation("YEUCAUNGHIPHEP_nguoiGuiIDToTAIKHOAN")
+  YEUCAUOT_YEUCAUOT_nguoiDuyetIDToTAIKHOAN             YEUCAUOT[]       @relation("YEUCAUOT_nguoiDuyetIDToTAIKHOAN")
+  YEUCAUOT_YEUCAUOT_nguoiGuiIDToTAIKHOAN               YEUCAUOT[]       @relation("YEUCAUOT_nguoiGuiIDToTAIKHOAN")
+  YEUCAUVATLIEU_YEUCAUVATLIEU_khoIDToTAIKHOAN          YEUCAUVATLIEU[]  @relation("YEUCAUVATLIEU_khoIDToTAIKHOAN")
+  YEUCAUVATLIEU_YEUCAUVATLIEU_toTruongIDToTAIKHOAN     YEUCAUVATLIEU[]  @relation("YEUCAUVATLIEU_toTruongIDToTAIKHOAN")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model TOSANXUAT {
+  id                                       String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at                               DateTime          @default(now()) @db.Timestamptz(6)
+  toTruongID                               String?           @db.Uuid
+  tenTo                                    String?
+  PHANCONGSANXUAT                          PHANCONGSANXUAT[]
+  TAIKHOAN_TAIKHOAN_toSanXuatIDToTOSANXUAT TAIKHOAN[]        @relation("TAIKHOAN_toSanXuatIDToTOSANXUAT")
+  TAIKHOAN_TOSANXUAT_toTruongIDToTAIKHOAN  TAIKHOAN?         @relation("TOSANXUAT_toTruongIDToTAIKHOAN", fields: [toTruongID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model VATLIEU {
+  id                   String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at           DateTime               @default(now()) @db.Timestamptz(6)
+  tenVatLieu           String?
+  soLuongTon           Int?
+  donViTinh            String?
+  nhaCungCapID         String?                @db.Uuid
+  trangThaiVatLieu     String?
+  CHITIETYEUCAUVATLIEU CHITIETYEUCAUVATLIEU[]
+  NHACUNGCAP           NHACUNGCAP?            @relation(fields: [nhaCungCapID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model YEUCAUNGHIPHEP {
+  id                                             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at                                     DateTime  @default(now()) @db.Timestamptz(6)
+  soNgayNghi                                     Int?      @db.SmallInt
+  ngayBatDauNghi                                 DateTime? @db.Timestamptz(6)
+  ngayKetThucNghi                                DateTime? @db.Timestamptz(6)
+  ngayGui                                        DateTime? @db.Date
+  trangThaiDuyetNghi                             String?
+  nguoiGuiID                                     String?   @db.Uuid
+  nguoiDuyetID                                   String?   @db.Uuid
+  TAIKHOAN_YEUCAUNGHIPHEP_nguoiDuyetIDToTAIKHOAN TAIKHOAN? @relation("YEUCAUNGHIPHEP_nguoiDuyetIDToTAIKHOAN", fields: [nguoiDuyetID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  TAIKHOAN_YEUCAUNGHIPHEP_nguoiGuiIDToTAIKHOAN   TAIKHOAN? @relation("YEUCAUNGHIPHEP_nguoiGuiIDToTAIKHOAN", fields: [nguoiGuiID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model YEUCAUOT {
+  id                                       String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at                               DateTime  @default(now()) @db.Timestamptz(6)
+  soGioOT                                  Int?      @db.SmallInt
+  ngayGui                                  DateTime? @db.Date
+  ngayOT                                   DateTime? @db.Date
+  trangThaiDonOT                           String?
+  nguoiDuyetID                             String?   @db.Uuid
+  nguoiGuiID                               String?   @db.Uuid
+  TAIKHOAN_YEUCAUOT_nguoiDuyetIDToTAIKHOAN TAIKHOAN? @relation("YEUCAUOT_nguoiDuyetIDToTAIKHOAN", fields: [nguoiDuyetID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  TAIKHOAN_YEUCAUOT_nguoiGuiIDToTAIKHOAN   TAIKHOAN? @relation("YEUCAUOT_nguoiGuiIDToTAIKHOAN", fields: [nguoiGuiID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model YEUCAUVATLIEU {
+  id                                          String                 @id(map: "YEUCAUVATLIET_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at                                  DateTime               @default(now()) @db.Timestamptz(6)
+  khoID                                       String?                @db.Uuid
+  toTruongID                                  String?                @db.Uuid
+  ngayGui                                     DateTime?              @db.Date
+  trangThaiYCVL                               String?
+  ghiChu                                      String?
+  CHITIETYEUCAUVATLIEU                        CHITIETYEUCAUVATLIEU[]
+  TAIKHOAN_YEUCAUVATLIEU_khoIDToTAIKHOAN      TAIKHOAN?              @relation("YEUCAUVATLIEU_khoIDToTAIKHOAN", fields: [khoID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "YEUCAUVATLIET_khoID_fkey")
+  TAIKHOAN_YEUCAUVATLIEU_toTruongIDToTAIKHOAN TAIKHOAN?              @relation("YEUCAUVATLIEU_toTruongIDToTAIKHOAN", fields: [toTruongID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "YEUCAUVATLIET_toTruongID_fkey")
+}
+
+enum trangthaidonot {
+  processing
+  approved
+  declined
+}
+
+enum trangthaihopdong {
+  active
+  inactive
+}
+
+enum trangthaitaikhoan {
+  active
+  inactive
 }

@@ -1,15 +1,17 @@
 "use client";
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Lock, User } from "lucide-react";
 
 export default function AuthPage() {
+    const router = useRouter();
     const [loginData, setLoginData] = useState({ login: '', password: '' });
 
-    const handleLogin = async (e :any) => {
+    const handleLogin = async (e: any) => {
         e.preventDefault();
         try {
             const res = await fetch('http://localhost:5000/api/taikhoan/login', {
@@ -18,8 +20,40 @@ export default function AuthPage() {
                 body: JSON.stringify(loginData)
             });
             const result = await res.json();
+
+            if (!res.ok) {
+                alert(result.error || 'Login failed');
+                return;
+            }
+
             console.log('Login Result:', result);
-            alert(JSON.stringify(result));
+
+            // Chuyển hướng dựa trên vai trò (position)
+            const position = result.user?.position || "";
+            let targetPath = "/employee/dashboard";
+
+            if (position.includes("Công nhân")) {
+                targetPath = "/employee/dashboard";
+            } else if (position.includes("Tổ trưởng")) {
+                targetPath = "/team-leader/dashboard";
+            } else if (position.includes("Kế toán")) {
+                targetPath = "/Accountant/EditPayroll";
+            } else if (position.includes("Quản lý") || position.includes("Giám đốc")) {
+                targetPath = "/FactoryManager/Dashboard";
+            } else if (position.includes("Kho")) {
+                targetPath = "/warehouse/materials";
+            } else if (position.includes("Nhân sự") || position.includes("HR")) {
+                targetPath = "/hr/dashboard";
+            }
+
+            // Lưu thông tin user nếu cần (ví dụ: localStorage/Context) - Tạm thời chỉ chuyển hướng
+            // loại bỏ password hash trước khi lưu vào local storage tránh hacker lỏ
+            const userStore = { ...result.user };
+            delete userStore.password;
+            localStorage.setItem("user", JSON.stringify(userStore));
+
+            router.push(targetPath);
+
         } catch (error) {
             console.error(error);
             alert('Login failed. Check console.');
@@ -30,7 +64,7 @@ export default function AuthPage() {
         <div className="flex min-h-screen items-center justify-center bg-zinc-900 relative overflow-hidden">
             {/* Background */}
             <div className="absolute inset-0 z-0">
-                 <Image
+                <Image
                     src="/hero-factory.png"
                     alt="Background"
                     fill
@@ -65,12 +99,12 @@ export default function AuthPage() {
                             />
                         </div>
                     </div>
-                        <div className="space-y-2">
+                    <div className="space-y-2">
                         <label className="text-xs font-medium text-white/80 uppercase tracking-wide">Mật khẩu</label>
                         <div className="relative">
                             <Lock className="absolute left-3 top-2.5 h-4 w-4 text-white/50" />
                             <Input
-                                
+
                                 type="password"
                                 placeholder="••••••••"
                                 value={loginData.password}
@@ -80,12 +114,12 @@ export default function AuthPage() {
                             />
                         </div>
                     </div>
-                    
+
                     <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-5 mt-4">
                         Đăng nhập
                     </Button>
                 </form>
-                
+
                 <div className="mt-8 text-center text-xs text-white/40">
                     <p>&copy; 2024 Nhà máy may Katece. Hệ thống bảo mật.</p>
                 </div>

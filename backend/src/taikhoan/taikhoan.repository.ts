@@ -1,9 +1,9 @@
 import { prisma } from '../prismaClient.ts';
 import pkg from '@prisma/client';
-type User = pkg.User;
+type TAIKHOAN = pkg.TAIKHOAN;
 
-export const getUserByLogin = async (login: string): Promise<User | null> => {
-  return prisma.user.findFirst({
+export const getUserByLogin = async (login: string): Promise<TAIKHOAN | null> => {
+  return prisma.tAIKHOAN.findFirst({
     where: {
       OR: [
         { username: login },
@@ -14,13 +14,13 @@ export const getUserByLogin = async (login: string): Promise<User | null> => {
 };
 
 export const createUser = async (data: {
-    username: string;
-    fullName: string;
-    position: string;
-    phone: string;
-    cccd: string;
-    email: string;
-    password: string;
+  username: string;
+  fullName: string;
+  position: string;
+  phone: string;
+  cccd: string;
+  email: string;
+  password: string;
 }) => {
-  return prisma.user.create({ data });
+  return prisma.tAIKHOAN.create({ data });
 };

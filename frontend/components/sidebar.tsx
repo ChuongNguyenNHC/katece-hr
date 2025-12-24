@@ -18,7 +18,11 @@ import {
   Package,
   Settings,
   SquarePen,
-  Briefcase
+  Briefcase,
+  UserRoundPen,
+  ContactRound,
+  ReceiptText,
+  UserCog
 } from "lucide-react";
 
 type SidebarItem = {
@@ -62,10 +66,10 @@ const accountantSidebarItems: SidebarItem[] = [
 // Ban quản lý xưởng
 const factoryManagementSidebarItems: SidebarItem[] = [
   { icon: LayoutDashboard, label: "Thống kê", href: "/FactoryManager/Dashboard" },
-  { icon: LayoutDashboard, label: "Phân công hợp đồng", href: "/FactoryManager/ContractAllocation" },
-  { icon: LayoutDashboard, label: "Phân tổ công nhân", href: "/FactoryManager/WorkerGrouping" },
-  { icon: LayoutDashboard, label: "Yêu cầu", href: "/FactoryManager/Requests" },
-  { icon: LayoutDashboard, label: "Quản lý nhân viên", href: "/FactoryManager/WorkerManagement" },
+  { icon: ContactRound, label: "Phân công hợp đồng", href: "/FactoryManager/ContractAllocation" },
+  { icon: UserRoundPen, label: "Phân tổ công nhân", href: "/FactoryManager/WorkerGrouping" },
+  { icon: ReceiptText, label: "Yêu cầu", href: "/FactoryManager/Requests" },
+  { icon: UserCog, label: "Quản lý nhân viên", href: "/FactoryManager/WorkerManagement" },
 ];
 
 // Kho

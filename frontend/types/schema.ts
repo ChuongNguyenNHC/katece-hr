@@ -257,6 +257,7 @@ export interface Vatlieu {
   donViTinh?: string;
   nhaCungCapID?: string;
   trangThai?: TrangThaiVatLieu;
+  giaMua?: number; // Giá mua mỗi đơn vị vật liệu
   CHITIETYEUCAUVATLIEU?: Chitietyeucauvatlieu[];
 }
 

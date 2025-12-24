@@ -252,7 +252,49 @@ export const mockContracts: Hopdongsx[] = [
     trangThaiHopDongSX: "active",
     TAIKHOAN: mockEmployees.find(e => e.id === "1"),
     PHANCONGSANXUAT: [mockAssignments[1]]
-  }
+  },
+  // 2023-12
+  {
+    id: "c3",
+    created_at: "2023-12-10T00:00:00Z",
+    tenHopDongSX: "Hợp đồng cuối năm",
+    nhanVienID: "3",
+    loaiLuong: "Fixed",
+    giaTriLuong: 120000,
+    ngayBatDau: "2023-12-10",
+    ngayKetThuc: "2024-01-10",
+    trangThaiHopDongSX: "active",
+    TAIKHOAN: mockEmployees.find(e => e.id === "3"),
+    PHANCONGSANXUAT: [mockAssignments[0]]
+  },
+  // 2024-01
+  {
+    id: "c4",
+    created_at: "2024-01-15T00:00:00Z",
+    tenHopDongSX: "Đầu năm 2024",
+    nhanVienID: "4",
+    loaiLuong: "Fixed",
+    giaTriLuong: 90000,
+    ngayBatDau: "2024-01-15",
+    ngayKetThuc: "2024-02-15",
+    trangThaiHopDongSX: "active",
+    TAIKHOAN: mockEmployees.find(e => e.id === "4"),
+    PHANCONGSANXUAT: [mockAssignments[1]]
+  },
+  // 2024-02
+  {
+    id: "c5",
+    created_at: "2024-02-20T00:00:00Z",
+    tenHopDongSX: "Hợp đồng tháng 2",
+    nhanVienID: "5",
+    loaiLuong: "Piecework",
+    giaTriLuong: 110000,
+    ngayBatDau: "2024-02-20",
+    ngayKetThuc: "2024-03-20",
+    trangThaiHopDongSX: "active",
+    TAIKHOAN: mockEmployees.find(e => e.id === "5"),
+    PHANCONGSANXUAT: [mockAssignments[0]]
+  },
 ];
 
 // Mock Labor Contracts (Hopdonglaodong)
@@ -547,22 +589,52 @@ export const mockChitietyeucauvatlieu: Chitietyeucauvatlieu[] = [
     id: "ctycvl1",
     vatLieuID: "vl1",
     yeuCauVatLieuID: "ycvl1",
-    soLuong: 100,
+    soLuong: 20,
     ghiChu: "Cần gấp cho đơn hàng A",
   },
   {
     id: "ctycvl2",
     vatLieuID: "vl2",
     yeuCauVatLieuID: "ycvl1",
-    soLuong: 50,
+    soLuong: 10,
     ghiChu: "Dùng cho sản xuất tháng 12",
   },
   {
     id: "ctycvl3",
     vatLieuID: "vl3",
     yeuCauVatLieuID: "ycvl2",
-    soLuong: 200,
+    soLuong: 30,
     ghiChu: "",
+  },
+  // Tháng 2024-01
+  {
+    id: "ctycvl4",
+    vatLieuID: "vl1",
+    yeuCauVatLieuID: "ycvl3",
+    soLuong: 15,
+    ghiChu: "Đơn hàng đầu năm",
+  },
+  {
+    id: "ctycvl5",
+    vatLieuID: "vl3",
+    yeuCauVatLieuID: "ycvl3",
+    soLuong: 18,
+    ghiChu: "Khuy áo cho sản xuất",
+  },
+  // Tháng 2024-02
+  {
+    id: "ctycvl6",
+    vatLieuID: "vl2",
+    yeuCauVatLieuID: "ycvl4",
+    soLuong: 12,
+    ghiChu: "Chỉ may cho đơn hàng mới",
+  },
+  {
+    id: "ctycvl7",
+    vatLieuID: "vl4",
+    yeuCauVatLieuID: "ycvl4",
+    soLuong: 8,
+    ghiChu: "Dây kéo cho sản phẩm mới",
   },
 ];
 
@@ -574,6 +646,7 @@ export const mockMaterials: Vatlieu[] = [
     donViTinh: "mét",
     nhaCungCapID: "ncc1",
     trangThai: "conHang",
+    giaMua: 15000, // Giá mua mỗi mét
     CHITIETYEUCAUVATLIEU: mockChitietyeucauvatlieu.filter(ct => ct.vatLieuID === "vl1"),
   },
   {
@@ -583,6 +656,7 @@ export const mockMaterials: Vatlieu[] = [
     donViTinh: "cuộn",
     nhaCungCapID: "ncc2",
     trangThai: "conHang",
+    giaMua: 8000, // Giá mua mỗi cuộn
     CHITIETYEUCAUVATLIEU: mockChitietyeucauvatlieu.filter(ct => ct.vatLieuID === "vl2"),
   },
   {
@@ -592,6 +666,7 @@ export const mockMaterials: Vatlieu[] = [
     donViTinh: "cái",
     nhaCungCapID: "ncc1",
     trangThai: "sapHet",
+    giaMua: 300, // Giá mua mỗi cái
     CHITIETYEUCAUVATLIEU: mockChitietyeucauvatlieu.filter(ct => ct.vatLieuID === "vl3"),
   },
   {
@@ -601,6 +676,7 @@ export const mockMaterials: Vatlieu[] = [
     donViTinh: "cái",
     nhaCungCapID: "ncc3",
     trangThai: "hetHang",
+    giaMua: 1200, // Giá mua mỗi cái
     CHITIETYEUCAUVATLIEU: [],
   }
 ];

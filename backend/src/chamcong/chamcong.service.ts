@@ -1,4 +1,4 @@
-import * as repository from './chamcong.repository.ts';
+import * as repository from './chamcong.repository';
 
 export class ChamCongService {
     async checkIn(userId: string) {

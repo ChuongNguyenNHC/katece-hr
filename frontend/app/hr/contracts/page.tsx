@@ -1,11 +1,29 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Plus, Search, FileText, Download, Calendar, Briefcase, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { mockContracts } from "@/lib/mock-data";
 
 export default function ContractsPage() {
+  const [contracts, setContracts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchContracts();
+  }, []);
+
+  const fetchContracts = async () => {
+    try {
+        const response = await fetch('http://localhost:5000/api/hopdongsx');
+        const data = await response.json();
+        setContracts(data);
+    } catch (error) {
+        console.error("Error fetching contracts:", error);
+    } finally {
+        setIsLoading(false);
+    }
+  };
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -54,7 +72,15 @@ export default function ContractsPage() {
                 </tr>
             </thead>
             <tbody className="divide-y">
-                {mockContracts.map((contract) => (
+                {isLoading ? (
+                    <tr>
+                        <td colSpan={6} className="px-6 py-10 text-center text-gray-500">Đang tải danh sách...</td>
+                    </tr>
+                ) : contracts.length === 0 ? (
+                    <tr>
+                        <td colSpan={6} className="px-6 py-10 text-center text-gray-500">Chưa có hợp đồng nào.</td>
+                    </tr>
+                ) : contracts.map((contract) => (
                     <tr key={contract.id} className="hover:bg-gray-50/50">
                         <td className="px-6 py-4 font-medium text-gray-900">
                             <div className="flex items-center gap-2">
@@ -66,26 +92,26 @@ export default function ContractsPage() {
                         <td className="px-6 py-4 font-medium text-gray-900">
                              <div className="flex items-center gap-1">
                                 <DollarSign className="h-3 w-3 text-gray-400" />
-                                {contract.giaTriLuong?.toLocaleString('vi-VN')} 
-                                <span className="text-xs text-gray-500 font-normal ml-1">({contract.loaiLuong})</span>
+                                {contract.PHANCONGSANXUAT?.reduce((total: number, ps: any) => total + (ps.CONGDOAN?.donGia || 0), 0).toLocaleString()} đ
                             </div>
                         </td>
                         <td className="px-6 py-4 text-gray-600">
                             <div className="flex items-center gap-2 text-xs">
                                 <Calendar className="h-3 w-3" />
-                                {contract.ngayBatDau} - {contract.ngayKetThuc}
+                                {new Date(contract.ngayBatDau).toLocaleDateString()} - {new Date(contract.ngayKetThuc).toLocaleDateString()}
                             </div>
                         </td>
                         <td className="px-6 py-4">
                             <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs font-medium">
-                                {contract.PHANCONGSANXUAT?.length || 0} Mục
+                                {contract.PHANCONGSANXUAT?.length || 0} Sản phẩm
                             </span>
                         </td>
                         <td className="px-6 py-4">
                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border
-                                ${contract.trangThaiHopDongSX === 'active' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 
+                                ${contract.trangThaiHopDongSX === 'active' || contract.trangThaiHopDongSX === 'Hoạt động' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 
+                                  contract.trangThaiHopDongSX === 'Chờ xử lý' ? 'bg-amber-50 text-amber-700 border-amber-100' :
                                   'bg-gray-100 text-gray-800'}`}>
-                                {contract.trangThaiHopDongSX === 'active' ? 'Hoạt động' : contract.trangThaiHopDongSX}
+                                {contract.trangThaiHopDongSX}
                             </span>
                         </td>
                         <td className="px-6 py-4 text-right">

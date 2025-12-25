@@ -1,7 +1,7 @@
 import expressPkg from 'express';
 type Request = expressPkg.Request;
 type Response = expressPkg.Response;
-import { ChamCongService } from './chamcong.service.ts';
+import { ChamCongService } from './chamcong.service';
 
 export class ChamCongController {
     private readonly service: ChamCongService;

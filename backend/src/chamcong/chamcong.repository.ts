@@ -1,4 +1,4 @@
-import { prisma } from '../prismaClient.ts';
+import { prisma } from '../prismaClient';
 import pkg from '@prisma/client';
 
 type CHAMCONG = pkg.CHAMCONG;

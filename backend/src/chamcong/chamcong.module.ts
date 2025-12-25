@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { ChamCongController } from "./chamcong.controller.ts";
-import { ChamCongService } from "./chamcong.service.ts";
+import { ChamCongController } from "./chamcong.controller";
+import { ChamCongService } from "./chamcong.service";
 
 const router = Router();
 const service = new ChamCongService();

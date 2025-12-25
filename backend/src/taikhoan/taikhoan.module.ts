@@ -9,6 +9,7 @@ const controller = new TaiKhoanController(service);
 
 router.post('/login', controller.login.bind(controller));
 router.post('/register', controller.register.bind(controller));
+router.post('/logout', controller.logout.bind(controller));
 
 // API cho Tổ trưởng thêm công nhân
 router.post('/create-worker', 

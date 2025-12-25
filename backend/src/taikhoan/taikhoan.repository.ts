@@ -1,4 +1,4 @@
-import { prisma } from '../prismaClient.ts';
+import { prisma } from '../prismaClient';
 import pkg from '@prisma/client';
 type TAIKHOAN = pkg.TAIKHOAN;
 
@@ -21,6 +21,7 @@ export const createUser = async (data: {
   cccd: string;
   email: string;
   password: string;
+  toSanXuatID?: string;
 }) => {
   return prisma.tAIKHOAN.create({ data });
 };

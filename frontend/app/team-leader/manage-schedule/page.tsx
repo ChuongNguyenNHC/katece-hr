@@ -15,8 +15,11 @@ const timeSlots = Array.from({ length: 33 }, (_, i) => {
   return `${hour.toString().padStart(2, "0")}:${minute}`;
 });
 
+import { AddWorkerModal } from "@/components/team-leader/add-worker-modal";
+
 export default function TeamLeaderManageSchedulePage() {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [isAddWorkerOpen, setIsAddWorkerOpen] = useState(false);
   
   // Filter for Team Leader's team "t1"
   const teamEmployees = mockEmployees.filter(e => e.toSanXuatID === "t1");
@@ -33,7 +36,7 @@ export default function TeamLeaderManageSchedulePage() {
         // Mock some preferences for this week
         const s = new Set<string>();
         // Add some random slots
-         const start = startOfWeek(new Date(), { weekStartsOn: 1 });
+        const start = startOfWeek(new Date(), { weekStartsOn: 1 });
          for(let d=0; d<5; d++) {
              const day = addDays(start, d);
              const dateStr = format(day, "yyyy-MM-dd");
@@ -90,6 +93,12 @@ export default function TeamLeaderManageSchedulePage() {
     alert("Đã lưu lịch làm việc cho tổ!");
   };
 
+  const handleWorkerAdded = () => {
+      // In a real app, you would reload the employee list here
+      // For now, we rely on the modal's success alert
+      console.log("Worker added, refreshing list...");
+  };
+
   return (
     <div className="h-[calc(100vh-2rem)] flex flex-col space-y-4">
       <div className="flex items-center justify-between shrink-0">
@@ -97,11 +106,22 @@ export default function TeamLeaderManageSchedulePage() {
             <h1 className="text-2xl font-bold tracking-tight text-gray-900">Xếp lịch làm việc</h1>
             <p className="text-gray-500">Xem nguyện vọng và xếp lịch cho từng nhân viên.</p>
         </div>
-        <Button onClick={handleSave} className="bg-blue-600 hover:bg-blue-700 text-white gap-2">
-            <Save className="h-4 w-4" />
-            Lưu thay đổi
-        </Button>
+        <div className="flex gap-2">
+            <Button onClick={() => setIsAddWorkerOpen(true)} variant="outline" className="gap-2">
+                Thêm nhân sự
+            </Button>
+            <Button onClick={handleSave} className="bg-blue-600 hover:bg-blue-700 text-white gap-2">
+                <Save className="h-4 w-4" />
+                Lưu thay đổi
+            </Button>
+        </div>
       </div>
+
+      <AddWorkerModal 
+        isOpen={isAddWorkerOpen}
+        onClose={() => setIsAddWorkerOpen(false)}
+        onSuccess={handleWorkerAdded}
+      />
 
       <div className="flex flex-1 gap-6 overflow-hidden">
         {/* Left: Employee List */}

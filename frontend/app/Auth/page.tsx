@@ -32,17 +32,17 @@ export default function AuthPage() {
             const position = result.user?.position || "";
             let targetPath = "/employee/dashboard";
 
-            if (position.includes("Công nhân")) {
+            if (position.includes("Cong nhan")) {
                 targetPath = "/employee/dashboard";
-            } else if (position.includes("Tổ trưởng")) {
+            } else if (position.includes("To truong")) {
                 targetPath = "/team-leader/dashboard";
-            } else if (position.includes("Kế toán")) {
+            } else if (position.includes("Ke toan")) {
                 targetPath = "/Accountant/EditPayroll";
-            } else if (position.includes("Quản lý") || position.includes("Giám đốc")) {
+            } else if (position.includes("Quan ly xuong")) {
                 targetPath = "/FactoryManager/Dashboard";
             } else if (position.includes("Kho")) {
                 targetPath = "/warehouse/materials";
-            } else if (position.includes("Nhân sự") || position.includes("HR")) {
+            } else if (position.includes("Nhan su")) {
                 targetPath = "/hr/dashboard";
             }
 
@@ -51,6 +51,7 @@ export default function AuthPage() {
             const userStore = { ...result.user };
             delete userStore.password;
             localStorage.setItem("user", JSON.stringify(userStore));
+            localStorage.setItem("token", result.token);
 
             router.push(targetPath);
 

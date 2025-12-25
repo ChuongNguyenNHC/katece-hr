@@ -4,11 +4,18 @@ import { Search, Edit, Plus } from "lucide-react";
 import { mockEmployees } from "@/lib/mock-data";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { AddEmployeeModal } from "./add-employee-modal";
 
 export default function FactoryManagerWorkerManagementPage() {
     const [positionFilter, setPositionFilter] = useState("");
     const [statusFilter, setStatusFilter] = useState("");
+    const [isAddEmployeeOpen, setIsAddEmployeeOpen] = useState(false);
+
+    const handleEmployeeAdded = () => {
+        // Refresh logic would go here
+        console.log("Employee added");
+    };
+
     return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -16,13 +23,20 @@ export default function FactoryManagerWorkerManagementPage() {
           <h1 className="text-2xl font-bold tracking-tight text-gray-900">Nhân viên</h1>
           <p className="text-gray-500">Quản lý nhân sự.</p>
         </div>
-        <Link href="/FactoryManager/WorkerManagement/new">
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white gap-2">
+        <Button 
+            onClick={() => setIsAddEmployeeOpen(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white gap-2"
+        >
             <Plus className="h-4 w-4" />
             Thêm nhân viên
-          </Button>
-        </Link>
+        </Button>
       </div>
+
+      <AddEmployeeModal 
+        isOpen={isAddEmployeeOpen}
+        onClose={() => setIsAddEmployeeOpen(false)}
+        onSuccess={handleEmployeeAdded}
+      />
 
       {/* Filters */}
             <div className="flex items-center gap-4 bg-white p-4 rounded-lg shadow-sm border">

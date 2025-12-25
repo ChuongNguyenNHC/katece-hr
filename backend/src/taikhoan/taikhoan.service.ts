@@ -95,4 +95,12 @@ export class TaiKhoanService {
     async getWorkers() {
         return repository.getWorkers();
     }
+
+    async assignWorkerToTeam(userId: string, toSanXuatID: string) {
+        return repository.updateUserTeam(userId, toSanXuatID);
+    }
+
+    async getProductionTeams() {
+        return repository.getProductionTeams();
+    }
 }

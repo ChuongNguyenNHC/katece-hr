@@ -28,5 +28,7 @@ router.post('/create-employee',
 // Get lists
 router.get('/employees', authenticateToken, controller.getEmployees.bind(controller));
 router.get('/workers', authenticateToken, controller.getWorkers.bind(controller));
+router.get('/production-teams', authenticateToken, controller.getProductionTeams.bind(controller));
+router.post('/assign-worker-team', authenticateToken, requireRole(['Quan ly xuong', 'Quan ly nhan su']), controller.assignWorkerToTeam.bind(controller));
 
 export { router as TaiKhoanModule };

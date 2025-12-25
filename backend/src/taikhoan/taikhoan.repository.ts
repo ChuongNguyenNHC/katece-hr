@@ -62,3 +62,14 @@ export const getWorkers = async () => {
         TOSANXUAT: user.TOSANXUAT_TAIKHOAN_toSanXuatIDToTOSANXUAT
       }));
   };
+
+export const updateUserTeam = async (userId: string, toSanXuatID: string) => {
+    return prisma.tAIKHOAN.update({
+        where: { id: userId },
+        data: { toSanXuatID }
+    });
+};
+
+export const getProductionTeams = async () => {
+    return prisma.tOSANXUAT.findMany();
+};

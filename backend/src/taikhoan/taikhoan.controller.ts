@@ -32,6 +32,10 @@ export class TaiKhoanController {
         }
     }
 
+    async logout(req: Request, res: Response) {
+        res.json({ message: "Logout successful" });
+    }
+
     async createWorker(req: AuthRequest, res: Response) {
         try {
              // Access user info attached by middleware
@@ -83,6 +87,25 @@ export class TaiKhoanController {
         try {
             const workers = await this.service.getWorkers();
             res.json(workers);
+        } catch (err: any) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    async assignWorkerToTeam(req: Request, res: Response) {
+        try {
+            const { userId, toSanXuatID } = req.body;
+            const updatedUser = await this.service.assignWorkerToTeam(userId, toSanXuatID);
+            res.json(updatedUser);
+        } catch (err: any) {
+            res.status(400).json({ error: err.message });
+        }
+    }
+
+    async getProductionTeams(req: Request, res: Response) {
+        try {
+            const teams = await this.service.getProductionTeams();
+            res.json(teams);
         } catch (err: any) {
             res.status(500).json({ error: err.message });
         }

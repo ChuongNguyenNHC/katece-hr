@@ -54,4 +54,14 @@ export const getWorkers = async () => {
     return response.data;
 };
 
+export const assignWorkerToTeam = async (userId: string, toSanXuatID: string) => {
+    const response = await api.post('/taikhoan/assign-worker-team', { userId, toSanXuatID });
+    return response.data;
+};
+
+export const getProductionTeams = async () => {
+    const response = await api.get('/taikhoan/production-teams');
+    return response.data;
+};
+
 export default api;

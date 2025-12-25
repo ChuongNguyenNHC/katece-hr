@@ -32,27 +32,27 @@ model BANGLUONG {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model CHAMCONG {
-  id             String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  created_at     DateTime        @default(now()) @db.Timestamptz(6)
-  checkInTime    DateTime?       @db.Timestamptz(6)
-  checkOutTime   DateTime?       @db.Timestamptz(6)
-  soGioLam       Decimal?        @db.Decimal
-  lichLamID      String?         @db.Uuid
-  nhanVienID     String?         @db.Uuid
-  CHITIETLICHLAM CHITIETLICHLAM? @relation(fields: [lichLamID], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  TAIKHOAN       TAIKHOAN?       @relation(fields: [nhanVienID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at     DateTime         @default(now()) @db.Timestamptz(6)
+  checkInTime    DateTime?        @db.Timestamptz(6)
+  checkOutTime   DateTime?        @db.Timestamptz(6)
+  soGioLam       Decimal?         @db.Decimal
+  nhanVienID     String?          @db.Uuid
+  TAIKHOAN       TAIKHOAN?        @relation(fields: [nhanVienID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  CHITIETLICHLAM CHITIETLICHLAM[]
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model CHITIETLICHLAM {
-  id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  created_at DateTime   @default(now()) @db.Timestamptz(6)
-  ngayLam    DateTime?  @db.Date
-  nhanVienID String?    @db.Uuid
-  lichLamID  String?    @db.Uuid
-  CHAMCONG   CHAMCONG[]
-  LICHLAM    LICHLAM?   @relation(fields: [lichLamID], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  TAIKHOAN   TAIKHOAN?  @relation(fields: [nhanVienID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  ngayLam    DateTime? @db.Date
+  nhanVienID String?   @db.Uuid
+  lichLamID  String?   @db.Uuid
+  chamCongID String?   @db.Uuid
+  CHAMCONG   CHAMCONG? @relation(fields: [chamCongID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  LICHLAM    LICHLAM?  @relation(fields: [lichLamID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  TAIKHOAN   TAIKHOAN? @relation(fields: [nhanVienID], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.

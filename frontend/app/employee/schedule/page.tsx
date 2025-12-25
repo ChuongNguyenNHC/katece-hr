@@ -6,6 +6,7 @@ import { vi } from "date-fns/locale";
 import { ChevronLeft, ChevronRight, Clock, MapPin, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { mockAttendance } from "@/lib/mock-data";
+import { AvailabilityModal } from "@/components/availability-modal";
 
 export default function EmployeeSchedulePage() {
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -13,6 +14,8 @@ export default function EmployeeSchedulePage() {
     const [userId, setUserId] = useState<string>("");
     const [loading, setLoading] = useState(false);
     const [todayStatus, setTodayStatus] = useState<any>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [schedules, setSchedules] = useState<any[]>([]);
 
     // Tải thông tin người dùng từ LocalStorage khi trang được tải
     useEffect(() => {
@@ -36,12 +39,26 @@ export default function EmployeeSchedulePage() {
         }
     }, []);
 
-    // Lấy trạng thái chấm công hôm nay khi có userId
+    // Lấy trạng thái chấm công hôm nay + lịch làm việc khi có userId
     useEffect(() => {
         if (userId) {
             fetchTodayStatus();
+            fetchMySchedules();
         }
-    }, [userId]);
+    }, [userId, isModalOpen]); // Reload schedules when modal closes (potentially saved new ones)
+
+    const fetchMySchedules = async () => {
+        if (!userId) return;
+        try {
+            const res = await fetch(`http://localhost:5000/api/lichlam/my-schedule?userId=${userId}`);
+            const data = await res.json();
+            if (data.data) {
+                setSchedules(data.data);
+            }
+        } catch (e) {
+            console.error("Failed to fetch schedules", e);
+        }
+    }
 
     // Hàm gọi API lấy trạng thái hôm nay
     async function fetchTodayStatus() {
@@ -63,19 +80,21 @@ export default function EmployeeSchedulePage() {
         }
     }
 
-    const handleCheckIn = async () => {
+    // ... (keep CheckIn/CheckOut implementations)
+
+    const handleCheckIn = async (chiTietLichLamID: string) => {
         if (!userId) return alert('Vui lòng nhập User ID');
         try {
             setLoading(true);
             const res = await fetch('http://localhost:5000/api/chamcong/check-in', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId })
+                body: JSON.stringify({ userId, chiTietLichLamID })
             });
             const data = await res.json();
             if (res.ok) {
                 alert('Check-in thành công!');
-                fetchTodayStatus();
+                fetchMySchedules(); // Refresh schedules to get updated attendance status
             } else {
                 alert('Lỗi: ' + data.error);
             }
@@ -86,19 +105,19 @@ export default function EmployeeSchedulePage() {
         }
     };
 
-    const handleCheckOut = async () => {
+    const handleCheckOut = async (chiTietLichLamID: string) => {
         if (!userId) return alert('Vui lòng nhập User ID');
         try {
             setLoading(true);
             const res = await fetch('http://localhost:5000/api/chamcong/check-out', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId })
+                body: JSON.stringify({ userId, chiTietLichLamID })
             });
             const data = await res.json();
             if (res.ok) {
                 alert('Check-out thành công!');
-                fetchTodayStatus();
+                fetchMySchedules();
             } else {
                 alert('Lỗi: ' + data.error);
             }
@@ -108,6 +127,7 @@ export default function EmployeeSchedulePage() {
             setLoading(false);
         }
     };
+
 
     const monthStart = startOfMonth(currentDate);
     const monthEnd = endOfMonth(currentDate);
@@ -124,27 +144,55 @@ export default function EmployeeSchedulePage() {
         setSelectedDate(today);
     }
 
-    // Lấy dữ liệu chấm công cho một ngày cụ thể
-    const getAttendanceForDate = (date: Date) => {
-        return mockAttendance.find(a => {
-            if (!a.checkInTime) return false;
-            const checkIn = new Date(a.checkInTime);
-            // Match date AND (User 1 OR User 2) for demo visibility
-            return isSameDay(checkIn, date) && (a.nhanVienID === "1" || a.nhanVienID === "2");
+    // Helper to find registered schedules for a date
+    const getRegisteredSchedules = (date: Date) => {
+        return schedules.filter(s => {
+            if (!s.ngayLam) return false;
+            // Parse date string YYYY-MM-DD from API
+            const scheduleDate = new Date(s.ngayLam);
+            return isSameDay(scheduleDate, date);
         });
     };
 
     // Xác định dữ liệu hiển thị trong panel chi tiết
-    let selectedAttendanceDisplay = selectedDate ? getAttendanceForDate(selectedDate) : null;
+    let selectedAttendanceDisplay = null;
+    let selectedSchedulesInfo: { id: string; start: Date; end: Date; attendance: any }[] = [];
 
-    // Ưu tiên hiển thị dữ liệu thực nếu ngày được chọn là HÔM NAY và có trạng thái thực
-    if (selectedDate && isSameDay(selectedDate, new Date()) && todayStatus) {
-        selectedAttendanceDisplay = {
-            checkInTime: todayStatus.checkInTime,
-            checkOutTime: todayStatus.checkOutTime,
-            soGioLam: todayStatus.soGioLam,
-            nhanVienID: userId
-        } as any;
+    if (selectedDate) {
+        // 1. Get all registered schedules for this date
+        const regSchedules = getRegisteredSchedules(selectedDate);
+        selectedSchedulesInfo = regSchedules.map(reg => {
+            if (reg.LICHLAM) {
+                return {
+                    id: reg.id,
+                    start: new Date(reg.LICHLAM.gioBatDau),
+                    end: new Date(reg.LICHLAM.gioKetThuc),
+                    attendance: reg.CHAMCONG
+                };
+            }
+            return null;
+        }).filter((item): item is { id: string; start: Date; end: Date; attendance: any } => item !== null);
+
+        // 2. Try to get actual attendance
+        // Prioritize todayStatus if today
+        if (isSameDay(selectedDate, new Date()) && todayStatus) {
+            selectedAttendanceDisplay = {
+                checkInTime: todayStatus.checkInTime,
+                checkOutTime: todayStatus.checkOutTime,
+                soGioLam: todayStatus.soGioLam,
+                nhanVienID: userId
+            };
+        } else {
+            // Find in mock data or past loaded data if you had it (currently removed mock call slightly)
+            // BUT wait, we need to allow viewing attendance history if we had that API.
+            // For now, let's keep mockAttendance fallback for past dates IF it matches our demo users
+            const mock = mockAttendance.find(a => {
+                if (!a.checkInTime) return false;
+                const checkIn = new Date(a.checkInTime);
+                return isSameDay(checkIn, selectedDate) && (a.nhanVienID === userId); // strict on userId now
+            });
+            if (mock) selectedAttendanceDisplay = mock;
+        }
     }
 
     return (
@@ -202,7 +250,14 @@ export default function EmployeeSchedulePage() {
                                     nhanVienID: userId
                                 };
                             } else {
-                                displayAttendance = getAttendanceForDate(date);
+                                // Fallback to mock logic just to keep existing calendar view dots if wanted, 
+                                // OR simply use this inline since function was removed.
+                                // Let's inline the logic for simplicity as the function was removed
+                                displayAttendance = mockAttendance.find(a => {
+                                    if (!a.checkInTime) return false;
+                                    const checkIn = new Date(a.checkInTime);
+                                    return isSameDay(checkIn, date) && (a.nhanVienID === "1" || a.nhanVienID === "2");
+                                });
                             }
 
                             let statusColor = "bg-gray-100";
@@ -266,73 +321,89 @@ export default function EmployeeSchedulePage() {
                         Chi tiết ngày {selectedDate ? format(selectedDate, "dd/MM/yyyy") : ""}
                     </h2>
 
-                    {/* Action Buttons for Today */}
-                    {selectedDate && isSameDay(selectedDate, new Date()) && (
-                        <div className="mb-6 grid grid-cols-2 gap-3">
-                            <Button
-                                size="lg"
-                                className="bg-green-600 hover:bg-green-700 text-white"
-                                onClick={handleCheckIn}
-                                disabled={loading || (todayStatus?.checkInTime)}
-                            >
-                                Check In
-                            </Button>
-                            <Button
-                                size="lg"
-                                className="bg-orange-500 hover:bg-orange-600 text-white"
-                                onClick={handleCheckOut}
-                                disabled={loading || !todayStatus?.checkInTime || todayStatus?.checkOutTime}
-                            >
-                                Check Out
-                            </Button>
-                        </div>
-                    )}
-
-                    {selectedAttendanceDisplay ? (
+                    {/* Render shifts with their own check-in/out buttons */}
+                    {(selectedAttendanceDisplay || selectedSchedulesInfo.length > 0) ? (
                         <div className="space-y-6">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="p-4 rounded-lg bg-green-50 border border-green-100">
-                                    <div className="flex items-center gap-2 text-green-700 mb-1">
+                            {/* Schedule Info Section */}
+                            {selectedSchedulesInfo.length > 0 ? (
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-2 text-blue-700 font-semibold mb-2">
                                         <Clock className="h-4 w-4" />
-                                        <span className="text-sm font-medium">Giờ vào</span>
+                                        <span>Danh sách ca làm việc</span>
                                     </div>
-                                    <p className="text-xl font-bold text-green-800">
-                                        {selectedAttendanceDisplay.checkInTime ? format(new Date(selectedAttendanceDisplay.checkInTime), "HH:mm") : "--:--"}
-                                    </p>
-                                </div>
-                                <div className="p-4 rounded-lg bg-orange-50 border border-orange-100">
-                                    <div className="flex items-center gap-2 text-orange-700 mb-1">
-                                        <Clock className="h-4 w-4" />
-                                        <span className="text-sm font-medium">Giờ ra</span>
-                                    </div>
-                                    <p className="text-xl font-bold text-orange-800">
-                                        {selectedAttendanceDisplay.checkOutTime ? format(new Date(selectedAttendanceDisplay.checkOutTime), "HH:mm") : "--:--"}
-                                    </p>
-                                </div>
-                            </div>
+                                    {selectedSchedulesInfo.map((shift, idx) => {
+                                        const now = new Date();
+                                        // Allow CI from 5m before start until end
+                                        const canCheckIn = now >= new Date(shift.start.getTime() - 5 * 60 * 1000) && now <= shift.end && !shift.attendance;
+                                        const canCheckOut = now >= shift.start && shift.attendance && !shift.attendance.checkOutTime;
 
-                            <div className="p-4 rounded-lg border bg-gray-50 space-y-3">
-                                <div className="flex justify-between items-center text-sm">
-                                    <span className="text-gray-500">Tổng giờ làm:</span>
-                                    <span className="font-medium text-gray-900">{selectedAttendanceDisplay.soGioLam || 0} giờ</span>
+                                        return (
+                                            <div key={idx} className="p-4 rounded-lg bg-blue-50 border border-blue-100 flex flex-col gap-4">
+                                                <div className="flex justify-between items-start">
+                                                    <div>
+                                                        <div className="text-xl font-bold text-blue-800">
+                                                            {format(shift.start, "HH:mm")} - {format(shift.end, "HH:mm")}
+                                                        </div>
+                                                        {shift.attendance && (
+                                                            <div className="text-xs text-green-600 font-medium mt-1">
+                                                                Đã vào: {format(new Date(shift.attendance.checkInTime), "HH:mm")}
+                                                                {shift.attendance.checkOutTime && ` • Đã ra: ${format(new Date(shift.attendance.checkOutTime), "HH:mm")}`}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                {/* Shift specific buttons (only for Today) */}
+                                                {isSameDay(selectedDate!, new Date()) && (
+                                                    <div className="grid grid-cols-2 gap-2">
+                                                        <Button
+                                                            size="sm"
+                                                            className="bg-green-600 hover:bg-green-700 text-white text-xs h-8"
+                                                            disabled={loading || !canCheckIn}
+                                                            onClick={() => handleCheckIn(shift.id)}
+                                                        >
+                                                            {shift.attendance ? "Đã Check In" : "Check In"}
+                                                        </Button>
+                                                        <Button
+                                                            size="sm"
+                                                            className="bg-orange-500 hover:bg-orange-600 text-white text-xs h-8"
+                                                            disabled={loading || !canCheckOut}
+                                                            onClick={() => handleCheckOut(shift.id)}
+                                                        >
+                                                            {shift.attendance?.checkOutTime ? "Đã Check Out" : "Check Out"}
+                                                        </Button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
                                 </div>
-                                <div className="flex justify-between items-center text-sm">
-                                    <span className="text-gray-500">Trạng thái:</span>
-                                    <span className="px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-medium">
-                                        {selectedAttendanceDisplay.checkInTime ? "Đã chấm công" : "Chưa chấm công"}
-                                    </span>
+                            ) : (
+                                <div className="text-sm text-gray-500 italic mb-4">Chưa đăng ký lịch làm việc cho ngày này.</div>
+                            )}
+
+                            {/* Divider if we had mock attendance too? No, usually it matches. */}
+                            {selectedAttendanceDisplay && !selectedSchedulesInfo.some(s => s.attendance?.id === selectedAttendanceDisplay.id) && (
+                                <div className="p-4 rounded-lg border bg-gray-50 space-y-3">
+                                    <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Dữ liệu chấm công khác</div>
+                                    <div className="flex justify-between items-center text-sm">
+                                        <span className="text-gray-500">Giờ vào:</span>
+                                        <span className="font-medium">{format(new Date(selectedAttendanceDisplay.checkInTime), "HH:mm")}</span>
+                                    </div>
+                                    {selectedAttendanceDisplay.checkOutTime && (
+                                        <div className="flex justify-between items-center text-sm">
+                                            <span className="text-gray-500">Giờ ra:</span>
+                                            <span className="font-medium">{format(new Date(selectedAttendanceDisplay.checkOutTime), "HH:mm")}</span>
+                                        </div>
+                                    )}
                                 </div>
-                                <div className="flex justify-between items-center text-sm">
-                                    <span className="text-gray-500">Ca làm việc:</span>
-                                    <span className="font-medium text-gray-900">Ca sáng (08:00 - 17:00)</span>
-                                </div>
-                            </div>
+                            )}
                         </div>
                     ) : (
                         <div className="text-center py-10 text-gray-500 flex-1 flex flex-col justify-center">
                             <CalendarPlaceholder className="h-16 w-16 mx-auto mb-3 opacity-20" />
-                            <p>Không có dữ liệu chấm công</p>
-                            <p className="text-sm">Vui lòng chọn ngày khác hoặc thực hiện Check-in.</p>
+                            <p>Không có dữ liệu lịch làm hoặc chấm công</p>
+                            <p className="text-sm">Vui lòng đăng ký lịch hoặc chọn ngày khác.</p>
                         </div>
                     )}
                 </div>

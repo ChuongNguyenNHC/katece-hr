@@ -120,16 +120,16 @@ export function EmployeeForm({ initialData, onSubmit }: EmployeeFormProps) {
                         className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white"
                     >
                         <option value="" disabled>-- Chọn vị trí --</option>
-                        <option value="Cong Nhan May">Cong Nhan May</option>
-                        <option value="To Truong">To Truong</option>
+                        <option value="Cong nhan">Cong nhan</option>
+                        <option value="To truong">To truong</option>
                         <option value="Thợ cắt">Thợ cắt</option>
                         <option value="KCS">KCS (Kiểm tra chất lượng)</option>
                         <option value="Thợ là">Thợ là</option>
                         <option value="Kho">Kho</option>
                         <option value="Kỹ thuật chuyền">Kỹ thuật chuyền</option>
-                        <option value="Quan Ly Xuong">Quan Ly Xuong</option>
-                        <option value="Ke Toan">Ke Toan</option>
-                        <option value="Nhan Su">Nhan Su</option>
+                        <option value="Quan ly xuong">Quan ly xuong</option>
+                        <option value="Ke toan">Ke toan</option>
+                        <option value="Quan ly nhan su">Quan ly nhan su</option>
                         <option value="Bảo vệ">Bảo vệ</option>
                     </select>
                 </div>

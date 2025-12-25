@@ -15,7 +15,7 @@ export default function FormDangKyTest() {
         email: "",
         password: "",
         fullName: "",
-        position: "Cong Nhan May",
+        position: "Cong nhan",
         phone: "",
         cccd: ""
     });
@@ -107,11 +107,11 @@ export default function FormDangKyTest() {
                                 value={formData.position}
                                 onChange={handleChange}
                             >
-                                <option value="Cong Nhan May">Cong Nhan May</option>
-                                <option value="To Truong">To Truong</option>
-                                <option value="Quan Ly Xuong">Quan Ly Xuong</option>
-                                <option value="Ke Toan">Ke Toan</option>
-                                <option value="Nhan Su">Nhan Su</option>
+                                <option value="Cong nhan">Cong nhan</option>
+                                <option value="To truong">To truong</option>
+                                <option value="Quan ly xuong">Quan ly xuong</option>
+                                <option value="Ke toan">Ke toan</option>
+                                <option value="Quan ly nhan su">Quan ly nhan su</option>
                                 <option value="Kho">Kho</option>
                             </select>
                         </div>

@@ -10,7 +10,7 @@ export class TaiKhoanController {
         this.service = service;
     }
 
-    async login (req: Request, res: Response) {
+    async login(req: Request, res: Response) {
         try {
             const { login, password } = req.body;
             const data = await this.service.login(login, password);
@@ -20,7 +20,7 @@ export class TaiKhoanController {
         }
     }
 
-    async register (req: Request, res: Response) {
+    async register(req: Request, res: Response) {
         try {
             const { username, email, password, fullName, position, phone, cccd } = req.body;
             const user = await this.service.register({

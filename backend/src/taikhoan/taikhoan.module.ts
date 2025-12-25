@@ -9,7 +9,9 @@ const controller = new TaiKhoanController(service);
 
 router.post('/login', controller.login.bind(controller));
 router.post('/register', controller.register.bind(controller));
-// API cho Tổ trưởng và Nhân sự thêm công nhân
+router.post('/logout', controller.logout.bind(controller));
+
+// API cho Tổ trưởng thêm công nhân
 router.post('/create-worker', 
     authenticateToken, 
     requireRole(['Quan ly nhan su', 'To truong', 'Quan ly xuong']), 

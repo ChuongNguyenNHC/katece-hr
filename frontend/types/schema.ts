@@ -20,7 +20,7 @@ export interface Taikhoan {
   trangThaiTaiKhoan?: string; // String?
   nguoiQuanLyID?: string; // @db.Uuid
   toSanXuatID?: string; // @db.Uuid
-  
+
   // Relations (simplified)
   NguoiQuanLy?: Taikhoan;
   TOSANXUAT?: Tosanxuat;
@@ -32,9 +32,8 @@ export interface Chamcong {
   checkInTime?: string;
   checkOutTime?: string;
   soGioLam?: number; // Decimal
-  lichLamID?: string;
   nhanVienID?: string;
-  
+
   // Relations
   CHITIETLICHLAM?: Chitietlichlam;
   TAIKHOAN?: Taikhoan;
@@ -46,7 +45,8 @@ export interface Chitietlichlam {
   ngayLam?: string; // @db.Date
   nhanVienID?: string;
   lichLamID?: string;
-  
+  chamCongID?: string;
+
   // Relations
   LICHLAM?: Lichlam;
   TAIKHOAN?: Taikhoan;
@@ -60,7 +60,7 @@ export interface Lichlam {
   ghiChu?: string;
   diaDiem?: string;
   trangThai?: string;
-  
+
   // Relations
   CHITIETLICHLAM?: Chitietlichlam[];
 }
@@ -74,7 +74,7 @@ export interface Yeucauot {
   trangThaiDonOT?: string;
   nguoiDuyetID?: string;
   nguoiGuiID?: string;
-  
+
   // Relations
   NguoiGui?: Taikhoan;
   NguoiDuyet?: Taikhoan;
@@ -88,7 +88,7 @@ export interface Phancongsanxuat {
   congDoanID?: string;
   trangThai?: string;
   toSanXuatID?: string;
-  
+
   // Relations
   HOPDONGSX?: Hopdongsx;
   SANPHAM?: Sanpham;
@@ -112,7 +112,7 @@ export interface Hopdongsx {
   tenKhachHang?: string;
   chinhSachPhat?: string;
   tienPhat?: number; // Decimal
-  
+
   // Relations
   TAIKHOAN?: Taikhoan; // NhanVien
   PHANCONGSANXUAT?: Phancongsanxuat[];
@@ -122,11 +122,11 @@ export interface Sanpham {
   id: string;
   created_at: string;
   tenSP?: string;
-  
+
   // Relations
   CONGDOAN_SANPHAM?: CongdoanSanpham[];
   PHANCONGSANXUAT?: Phancongsanxuat[];
-  
+
   // Helper for UI
   CONGDOAN?: Congdoan[];
 }
@@ -136,7 +136,7 @@ export interface Congdoan {
   created_at: string;
   tenCongDoan?: string;
   donGia?: number; // Decimal
-  
+
   // Relations
   CONGDOAN_SANPHAM?: CongdoanSanpham[];
   PHANCONGSANXUAT?: Phancongsanxuat[];
@@ -147,7 +147,7 @@ export interface CongdoanSanpham {
   created_at: string;
   sanPhamID?: string;
   congDoanID?: string;
-  
+
   // Relations
   CONGDOAN?: Congdoan;
   SANPHAM?: Sanpham;
@@ -158,7 +158,7 @@ export interface Tosanxuat {
   created_at: string;
   toTruongID?: string;
   tenTo?: string; // Team Name
-  
+
   // Relations
   TAIKHOAN_DS?: Taikhoan[];
   ToTruong?: Taikhoan;
@@ -168,7 +168,7 @@ export interface Hopdonglaodong {
   id: string;
   created_at: string;
   nhanVienID?: string;
-  loaiHopDongID?: string; 
+  loaiHopDongID?: string;
   tenHopDong?: string;
   loaiLuong?: string;
   giaTriLuong?: number; // Decimal
@@ -176,7 +176,7 @@ export interface Hopdonglaodong {
   ngayKetThuc?: string; // @db.Date
   trangThaiHDLD?: string;
   diaChiLamViec?: string;
-  
+
   // Relations
   LOAIHOPDONG?: Loaihopdong;
   TAIKHOAN?: Taikhoan; // NhanVien
@@ -219,9 +219,9 @@ export interface Bangluong {
   soNgayNghiKhongPhep?: number;
   soGioOT?: number;
   maNguoiChinhSua?: string;
-  
+
   sanLuong?: number; // Production Output (products count)
-  
+
   // Relations
   TAIKHOAN?: Taikhoan;
 }
@@ -283,11 +283,11 @@ export interface Chitietyeucauvatlieu {
 }
 
 export interface Nhacungcap {
-    id: string;
-    tenNhaCungCap?: string;
-    diaChi?: string;
-    soDienThoai?: string;
-    email?: string;
-    loaiNCC?: string;
-    trangThaiNCC?: string;
+  id: string;
+  tenNhaCungCap?: string;
+  diaChi?: string;
+  soDienThoai?: string;
+  email?: string;
+  loaiNCC?: string;
+  trangThaiNCC?: string;
 }

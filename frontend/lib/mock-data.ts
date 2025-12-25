@@ -1,7 +1,7 @@
-import { 
-  Taikhoan, 
-  Hopdongsx, 
-  Yeucauot, 
+import {
+  Taikhoan,
+  Hopdongsx,
+  Yeucauot,
   Sanpham,
   Congdoan,
   Phancongsanxuat,
@@ -10,27 +10,28 @@ import {
   Phanhoiluong,
   Chamcong,
   Tosanxuat,
-  Chitietyeucauvatlieu, 
-  Vatlieu, 
-  Yeucauvatlieu } 
-from '@/types/schema';
+  Chitietyeucauvatlieu,
+  Vatlieu,
+  Yeucauvatlieu
+}
+  from '@/types/schema';
 
 
 
 // Mock Teams (Tosanxuat)
 export const mockTeams: Tosanxuat[] = [
-    {
-        id: "t1",
-        created_at: "2023-01-01",
-        toTruongID: "2", // Tran Thi B is Team Leader
-        tenTo: "Tổ May 1"
-    },
-    {
-        id: "t2",
-        created_at: "2023-01-01",
-        toTruongID: "5", // Hoang Van E is Team Leader
-        tenTo: "Tổ Hoàn Thiện"
-    }
+  {
+    id: "t1",
+    created_at: "2023-01-01",
+    toTruongID: "2", // Tran Thi B is Team Leader
+    tenTo: "Tổ May 1"
+  },
+  {
+    id: "t2",
+    created_at: "2023-01-01",
+    toTruongID: "5", // Hoang Van E is Team Leader
+    tenTo: "Tổ Hoàn Thiện"
+  }
 ];
 
 // Mock Employees (Taikhoan)
@@ -94,14 +95,14 @@ export const mockEmployees: Taikhoan[] = [
     toSanXuatID: "t1",
     TOSANXUAT: mockTeams[0],
     NguoiQuanLy: { // Circular ref simulation
-        id: "2",
-        username: "swilliams",
-        fullName: "Trần Thị B",
-        position: "Quản lý chuyền",
-        phone: "0901234568",
-        cccd: "012345678902",
-        email: "tranthib@katece.com",
-        createdAt: "2023-02-01T09:00:00Z"
+      id: "2",
+      username: "swilliams",
+      fullName: "Trần Thị B",
+      position: "Quản lý chuyền",
+      phone: "0901234568",
+      cccd: "012345678902",
+      email: "tranthib@katece.com",
+      createdAt: "2023-02-01T09:00:00Z"
     } as Taikhoan
   },
   {
@@ -135,14 +136,14 @@ export const mockEmployees: Taikhoan[] = [
     toSanXuatID: "t1",
     TOSANXUAT: mockTeams[0],
     NguoiQuanLy: {
-        id: "2",
-        username: "swilliams",
-        fullName: "Trần Thị B",
-        position: "Quản lý chuyền",
-        phone: "0901234568",
-        cccd: "012345678902",
-        email: "tranthib@katece.com",
-        createdAt: "2023-02-01T09:00:00Z"
+      id: "2",
+      username: "swilliams",
+      fullName: "Trần Thị B",
+      position: "Quản lý chuyền",
+      phone: "0901234568",
+      cccd: "012345678902",
+      email: "tranthib@katece.com",
+      createdAt: "2023-02-01T09:00:00Z"
     } as Taikhoan
   },
   {
@@ -160,15 +161,15 @@ export const mockEmployees: Taikhoan[] = [
     nguoiQuanLyID: "5",
     toSanXuatID: "t2",
     TOSANXUAT: mockTeams[1],
-     NguoiQuanLy: {
-        id: "5",
-        username: "dwilson",
-        fullName: "Hoàng Văn E",
-        position: "Công nhân kiểm hàng",
-        phone: "0901234571",
-        cccd: "012345678905",
-        email: "hoangvane@katece.com",
-        createdAt: "2023-05-20T09:00:00Z"
+    NguoiQuanLy: {
+      id: "5",
+      username: "dwilson",
+      fullName: "Hoàng Văn E",
+      position: "Công nhân kiểm hàng",
+      phone: "0901234571",
+      cccd: "012345678905",
+      email: "hoangvane@katece.com",
+      createdAt: "2023-05-20T09:00:00Z"
     } as Taikhoan
   },
   {
@@ -221,8 +222,8 @@ export const mockProducts: Sanpham[] = [
 
 // Mock Assignments (Phancongsanxuat) used as "Contract Details"
 const mockAssignments: Phancongsanxuat[] = [
-    { id: "pcsx1", created_at: "2023-01-01", sanPhamID: "p1", soLuong: 100, SANPHAM: mockProducts[0] },
-    { id: "pcsx2", created_at: "2023-01-01", sanPhamID: "p2", soLuong: 50, SANPHAM: mockProducts[1] }
+  { id: "pcsx1", created_at: "2023-01-01", sanPhamID: "p1", soLuong: 100, SANPHAM: mockProducts[0] },
+  { id: "pcsx2", created_at: "2023-01-01", sanPhamID: "p2", soLuong: 50, SANPHAM: mockProducts[1] }
 ];
 
 // Mock Production Contracts (Hopdongsx)
@@ -299,143 +300,143 @@ export const mockContracts: Hopdongsx[] = [
 
 // Mock Labor Contracts (Hopdonglaodong)
 export const mockLaborContracts: Hopdonglaodong[] = [
-    {
-        id: "lc1",
-        created_at: "2023-01-01",
-        nhanVienID: "1",
-        tenHopDong: "Hợp đồng chính thức",
-        loaiLuong: "Monthly",
-        giaTriLuong: 2000,
-        ngayBatDau: "2023-01-01",
-        ngayKetThuc: "2024-01-01",
-        trangThaiHDLD: "active",
-        diaChiLamViec: "Xưởng 1",
-        TAIKHOAN: mockEmployees.find(e => e.id === "1")
-    },
-    {
-        id: "lc2",
-        created_at: "2023-02-01",
-        nhanVienID: "2",
-        tenHopDong: "Hợp đồng quản lý",
-        loaiLuong: "Monthly",
-        giaTriLuong: 3500,
-        ngayBatDau: "2023-02-01",
-        ngayKetThuc: "2025-02-01",
-        trangThaiHDLD: "active",
-        diaChiLamViec: "Văn phòng xưởng",
-        TAIKHOAN: mockEmployees.find(e => e.id === "2")
-    }
+  {
+    id: "lc1",
+    created_at: "2023-01-01",
+    nhanVienID: "1",
+    tenHopDong: "Hợp đồng chính thức",
+    loaiLuong: "Monthly",
+    giaTriLuong: 2000,
+    ngayBatDau: "2023-01-01",
+    ngayKetThuc: "2024-01-01",
+    trangThaiHDLD: "active",
+    diaChiLamViec: "Xưởng 1",
+    TAIKHOAN: mockEmployees.find(e => e.id === "1")
+  },
+  {
+    id: "lc2",
+    created_at: "2023-02-01",
+    nhanVienID: "2",
+    tenHopDong: "Hợp đồng quản lý",
+    loaiLuong: "Monthly",
+    giaTriLuong: 3500,
+    ngayBatDau: "2023-02-01",
+    ngayKetThuc: "2025-02-01",
+    trangThaiHDLD: "active",
+    diaChiLamViec: "Văn phòng xưởng",
+    TAIKHOAN: mockEmployees.find(e => e.id === "2")
+  }
 ];
 
 // Mock Salaries (Bangluong)
 // Assuming current month calculation
 export const mockSalaries: Bangluong[] = [
-    {
-        id: "bl1",
-        created_at: "2023-11-25",
-        thangLuong: "2024-12-01",
-        maNguoiDung: "1", // Alex
-        luongCoBan: 6500000,
-        tienOT: 500000,
-        phuCap: 1000000,
-        tienThuong: 300000,
-        khauTru: 150000,
-        tongLuong: 8150000,
-        trangThaiDuyetLuong: "Đã xử lý",
-        TAIKHOAN: mockEmployees.find(e => e.id === "1"),
-        soNgayNghiCoPhep: 1,
-        soNgayNghiKhongPhep: 0,
-        soGioOT: 10,
-        sanLuong: 1200
-    },
-    {
-        id: "bl2",
-        created_at: "2023-11-25",
-        thangLuong: "2024-12-01",
-        maNguoiDung: "2", // Sarah
-        luongCoBan: 12000000,
-        tienOT: 0,
-        phuCap: 2000000,
-        tienThuong: 1500000,
-        khauTru: 200000,
-        tongLuong: 15300000,
-        trangThaiDuyetLuong: "Đã trả",
-        TAIKHOAN: mockEmployees.find(e => e.id === "2"),
-         soNgayNghiCoPhep: 0,
-        soNgayNghiKhongPhep: 0,
-        soGioOT: 0,
-        sanLuong: 0
-    },
-    {
-        id: "bl3",
-        created_at: "2023-11-25",
-        thangLuong: "2023-11-01",
-        maNguoiDung: "1", // Nguyen Van A
-        luongCoBan: 6500000,
-        tienOT: 300000,
-        phuCap: 500000,
-        tienThuong: 200000,
-        khauTru: 0,
-        tongLuong: 7500000,
-        trangThaiDuyetLuong: "Chờ xử lý", // Pending for Team Leader approval
-        TAIKHOAN: mockEmployees.find(e => e.id === "1"),
-        soNgayNghiCoPhep: 0,
-        soNgayNghiKhongPhep: 0,
-        soGioOT: 5,
-        sanLuong: 1050
-    },
-    {
-        id: "bl4",
-        created_at: "2023-11-25",
-        thangLuong: "2023-11-01",
-        maNguoiDung: "3", // Le Van C
-        luongCoBan: 7000000,
-        tienOT: 250000,
-        phuCap: 500000,
-        tienThuong: 0,
-        khauTru: 100000,
-        tongLuong: 7650000,
-        trangThaiDuyetLuong: "Chờ xử lý",
-        TAIKHOAN: mockEmployees.find(e => e.id === "3"),
-        soNgayNghiCoPhep: 1,
-        soNgayNghiKhongPhep: 0,
-        soGioOT: 2,
-        sanLuong: 980
-    }
+  {
+    id: "bl1",
+    created_at: "2023-11-25",
+    thangLuong: "2024-12-01",
+    maNguoiDung: "1", // Alex
+    luongCoBan: 6500000,
+    tienOT: 500000,
+    phuCap: 1000000,
+    tienThuong: 300000,
+    khauTru: 150000,
+    tongLuong: 8150000,
+    trangThaiDuyetLuong: "Đã xử lý",
+    TAIKHOAN: mockEmployees.find(e => e.id === "1"),
+    soNgayNghiCoPhep: 1,
+    soNgayNghiKhongPhep: 0,
+    soGioOT: 10,
+    sanLuong: 1200
+  },
+  {
+    id: "bl2",
+    created_at: "2023-11-25",
+    thangLuong: "2024-12-01",
+    maNguoiDung: "2", // Sarah
+    luongCoBan: 12000000,
+    tienOT: 0,
+    phuCap: 2000000,
+    tienThuong: 1500000,
+    khauTru: 200000,
+    tongLuong: 15300000,
+    trangThaiDuyetLuong: "Đã trả",
+    TAIKHOAN: mockEmployees.find(e => e.id === "2"),
+    soNgayNghiCoPhep: 0,
+    soNgayNghiKhongPhep: 0,
+    soGioOT: 0,
+    sanLuong: 0
+  },
+  {
+    id: "bl3",
+    created_at: "2023-11-25",
+    thangLuong: "2023-11-01",
+    maNguoiDung: "1", // Nguyen Van A
+    luongCoBan: 6500000,
+    tienOT: 300000,
+    phuCap: 500000,
+    tienThuong: 200000,
+    khauTru: 0,
+    tongLuong: 7500000,
+    trangThaiDuyetLuong: "Chờ xử lý", // Pending for Team Leader approval
+    TAIKHOAN: mockEmployees.find(e => e.id === "1"),
+    soNgayNghiCoPhep: 0,
+    soNgayNghiKhongPhep: 0,
+    soGioOT: 5,
+    sanLuong: 1050
+  },
+  {
+    id: "bl4",
+    created_at: "2023-11-25",
+    thangLuong: "2023-11-01",
+    maNguoiDung: "3", // Le Van C
+    luongCoBan: 7000000,
+    tienOT: 250000,
+    phuCap: 500000,
+    tienThuong: 0,
+    khauTru: 100000,
+    tongLuong: 7650000,
+    trangThaiDuyetLuong: "Chờ xử lý",
+    TAIKHOAN: mockEmployees.find(e => e.id === "3"),
+    soNgayNghiCoPhep: 1,
+    soNgayNghiKhongPhep: 0,
+    soGioOT: 2,
+    sanLuong: 980
+  }
 ];
 
 // Mock Feedbacks (Phanhoiluong)
 export const mockFeedbacks: Phanhoiluong[] = [
-    {
-        id: "ph1",
-        created_at: "2023-11-26",
-        nguoiGuiID: "1",
-        phieuLuongID: "bl1",
-        noiDung: "Giờ tăng ca ngày Chủ nhật tính chưa đúng.",
-        trangThaiPhanHoi: "processing",
-        trangThaiDuyet: "teamLeaderApproved",
-        nguoiDuyetID: "2"
-    },
-    {
-        id: "ph2",
-        created_at: "2023-11-27",
-        nguoiGuiID: "3", // Le Van C
-        phieuLuongID: "bl4",
-        noiDung: "Thiếu tiền phụ cấp cơm trưa.",
-        trangThaiPhanHoi: "resolved", // Resolved
-        trangThaiDuyet: "teamLeaderApproved",
-        nguoiDuyetID: "2"
-    },
-    {
-        id: "ph3",
-        created_at: "2023-12-01",
-        nguoiGuiID: "4", // Pham Thi D
-        phieuLuongID: "bl_new", 
-        noiDung: "Sao tháng này bị trừ tiền phạt?",
-        trangThaiPhanHoi: "processing",
-        trangThaiDuyet: "teamLeaderPending",
-        nguoiDuyetID: "5" // Team Leader E
-    }
+  {
+    id: "ph1",
+    created_at: "2023-11-26",
+    nguoiGuiID: "1",
+    phieuLuongID: "bl1",
+    noiDung: "Giờ tăng ca ngày Chủ nhật tính chưa đúng.",
+    trangThaiPhanHoi: "processing",
+    trangThaiDuyet: "teamLeaderApproved",
+    nguoiDuyetID: "2"
+  },
+  {
+    id: "ph2",
+    created_at: "2023-11-27",
+    nguoiGuiID: "3", // Le Van C
+    phieuLuongID: "bl4",
+    noiDung: "Thiếu tiền phụ cấp cơm trưa.",
+    trangThaiPhanHoi: "resolved", // Resolved
+    trangThaiDuyet: "teamLeaderApproved",
+    nguoiDuyetID: "2"
+  },
+  {
+    id: "ph3",
+    created_at: "2023-12-01",
+    nguoiGuiID: "4", // Pham Thi D
+    phieuLuongID: "bl_new",
+    noiDung: "Sao tháng này bị trừ tiền phạt?",
+    trangThaiPhanHoi: "processing",
+    trangThaiDuyet: "teamLeaderPending",
+    nguoiDuyetID: "5" // Team Leader E
+  }
 ];
 
 
@@ -494,74 +495,67 @@ export const mockRequests: Yeucauot[] = [
 
 // Mock Attendance (Chamcong)
 export const mockAttendance: Chamcong[] = [
-    // Employee 1 (Alex/Nguyen Van A)
-    {
-        id: "cc1",
-        created_at: "2025-12-01",
-        checkInTime: "2025-12-01T08:00:00Z",
-        checkOutTime: "2025-12-01T17:00:00Z",
-        soGioLam: 8,
-        lichLamID: "ll1",
-        nhanVienID: "1"
-    },
-    {
-        id: "cc2",
-        created_at: "2025-12-02",
-        checkInTime: "2025-12-02T08:15:00Z",
-        checkOutTime: "2025-12-02T17:10:00Z",
-        soGioLam: 8,
-        lichLamID: "ll1",
-        nhanVienID: "1"
-    },
-    {
-        id: "cc3",
-        created_at: "2025-12-03",
-        checkInTime: "2025-12-03T07:55:00Z",
-        checkOutTime: "2025-12-03T17:05:00Z",
-        soGioLam: 8,
-        lichLamID: "ll1",
-        nhanVienID: "1"
-    },
-    // ... Recent days
-    {
-        id: "cc4",
-        created_at: "2025-12-22",
-        checkInTime: "2025-12-22T08:00:00Z",
-        checkOutTime: "2025-12-22T17:00:00Z",
-        soGioLam: 8,
-        lichLamID: "ll1",
-        nhanVienID: "1"
-    },
-     {
-        id: "cc5",
-        created_at: "2025-12-23",
-        checkInTime: "2025-12-23T07:50:00Z",
-        // No check out yet for today
-        checkOutTime: undefined,
-        soGioLam: 0,
-        lichLamID: "ll1",
-        nhanVienID: "1"
-    },
+  // Employee 1 (Alex/Nguyen Van A)
+  {
+    id: "cc1",
+    created_at: "2025-12-01",
+    checkInTime: "2025-12-01T08:00:00Z",
+    checkOutTime: "2025-12-01T17:00:00Z",
+    soGioLam: 8,
+    nhanVienID: "1"
+  },
+  {
+    id: "cc2",
+    created_at: "2025-12-02",
+    checkInTime: "2025-12-02T08:15:00Z",
+    checkOutTime: "2025-12-02T17:10:00Z",
+    soGioLam: 8,
+    nhanVienID: "1"
+  },
+  {
+    id: "cc3",
+    created_at: "2025-12-03",
+    checkInTime: "2025-12-03T07:55:00Z",
+    checkOutTime: "2025-12-03T17:05:00Z",
+    soGioLam: 8,
+    nhanVienID: "1"
+  },
+  // ... Recent days
+  {
+    id: "cc4",
+    created_at: "2025-12-22",
+    checkInTime: "2025-12-22T08:00:00Z",
+    checkOutTime: "2025-12-22T17:00:00Z",
+    soGioLam: 8,
+    nhanVienID: "1"
+  },
+  {
+    id: "cc5",
+    created_at: "2025-12-23",
+    checkInTime: "2025-12-23T07:50:00Z",
+    // No check out yet for today
+    checkOutTime: undefined,
+    soGioLam: 0,
+    nhanVienID: "1"
+  },
 
-    // Employee 2 (Sarah/Manager) - Simulating HR data
-    {
-        id: "cc_hr_1",
-        created_at: "2025-12-01",
-        checkInTime: "2025-12-01T08:30:00Z",
-        checkOutTime: "2025-12-01T17:30:00Z",
-        soGioLam: 8,
-        lichLamID: "ll2",
-        nhanVienID: "2"
-    },
-    {
-        id: "cc_hr_2",
-        created_at: "2025-12-23",
-        checkInTime: "2025-12-23T08:30:00Z",
-        checkOutTime: undefined,
-        soGioLam: 8,
-        lichLamID: "ll2",
-        nhanVienID: "2"
-    }
+  // Employee 2 (Sarah/Manager) - Simulating HR data
+  {
+    id: "cc_hr_1",
+    created_at: "2025-12-01",
+    checkInTime: "2025-12-01T08:30:00Z",
+    checkOutTime: "2025-12-01T17:30:00Z",
+    soGioLam: 8,
+    nhanVienID: "2"
+  },
+  {
+    id: "cc_hr_2",
+    created_at: "2025-12-23",
+    checkInTime: "2025-12-23T08:30:00Z",
+    checkOutTime: undefined,
+    soGioLam: 8,
+    nhanVienID: "2"
+  }
 ];
 // Mock Material Requests (Yeucauvatlieu)
 export const mockMaterialRequests: Yeucauvatlieu[] = [

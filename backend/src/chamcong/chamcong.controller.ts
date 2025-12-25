@@ -12,12 +12,12 @@ export class ChamCongController {
 
     async checkIn(req: Request, res: Response) {
         try {
-            const { userId } = req.body;
-            if (!userId) {
-                return res.status(400).json({ error: 'Missing userId' });
+            const { userId, chiTietLichLamID } = req.body;
+            if (!userId || !chiTietLichLamID) {
+                return res.status(400).json({ error: 'Missing userId or chiTietLichLamID' });
             }
 
-            const data = await this.service.checkIn(userId);
+            const data = await this.service.checkIn(userId, chiTietLichLamID);
             res.json(data);
         } catch (err: any) {
             res.status(400).json({ error: err.message });
@@ -26,12 +26,12 @@ export class ChamCongController {
 
     async checkOut(req: Request, res: Response) {
         try {
-            const { userId } = req.body;
-            if (!userId) {
-                return res.status(400).json({ error: 'Missing userId' });
+            const { userId, chiTietLichLamID } = req.body;
+            if (!userId || !chiTietLichLamID) {
+                return res.status(400).json({ error: 'Missing userId or chiTietLichLamID' });
             }
 
-            const data = await this.service.checkOut(userId);
+            const data = await this.service.checkOut(userId, chiTietLichLamID);
             res.json(data);
         } catch (err: any) {
             res.status(400).json({ error: err.message });

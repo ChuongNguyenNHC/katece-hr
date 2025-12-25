@@ -17,7 +17,13 @@ export class TaiKhoanService {
         }
 
         const token = jwt.sign(
-            { id: user.id, username: user.username, email: user.email },
+            { 
+                id: user.id, 
+                username: user.username, 
+                email: user.email, 
+                position: user.position,
+                toSanXuatID: user.toSanXuatID 
+            },
             JWT_SECRET,
             { expiresIn: '1h' }
         );
@@ -46,9 +52,6 @@ export class TaiKhoanService {
         username: string;
         email: string;
     }) {
-        if (!leaderToSanXuatID) {
-            throw new Error("Tổ trưởng chưa được phân công tổ sản xuất.");
-        }
 
         // Default password for workers (can be changed later)
         const hashedPassword = await bcrypt.hash("123456", 10);
@@ -57,8 +60,8 @@ export class TaiKhoanService {
             ...input,
             email: input.email,
             password: hashedPassword,
-            position: "Công nhân may", // Hardcoded role for workers added by Team Leader
-            toSanXuatID: leaderToSanXuatID
+            position: "Cong nhan",
+            toSanXuatID: leaderToSanXuatID || undefined 
         });
     }
 
@@ -72,8 +75,8 @@ export class TaiKhoanService {
         password?: string;
     }) {
         // Prevent creating "Worker" roles via this API (Team Leader responsibility)
-        if (input.position === "Công nhân may") {
-            throw new Error("Quản lý xưởng không được phép thêm Công nhân may. Vui lòng để Tổ trưởng thực hiện.");
+        if (input.position === "Cong nhan") {
+            throw new Error("Quản lý sản xuất không được phép thêm Công nhân may. Vui lòng để Tổ trưởng thực hiện.");
         }
 
         const password = input.password || "123456";
@@ -83,5 +86,13 @@ export class TaiKhoanService {
             ...input,
             password: hashedPassword
         });
-    } 
+    }
+
+    async getEmployees() {
+        return repository.getEmployees();
+    }
+
+    async getWorkers() {
+        return repository.getWorkers();
+    }
 }

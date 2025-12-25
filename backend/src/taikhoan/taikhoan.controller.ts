@@ -38,14 +38,17 @@ export class TaiKhoanController {
              const user = req.user;
              if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
-             const { fullName, phone, cccd, username } = req.body;
+             const { fullName, phone, cccd, username, email } = req.body;
              
              const newWorker = await this.service.createWorker(user.id, user.toSanXuatID, {
-                 fullName, phone, cccd, username, email: user.email
+                 fullName, phone, cccd, username, email
              });
              
              res.json(newWorker);
         } catch (err: any) {
+             if (err.code === 'P2002') {
+                return res.status(400).json({ error: 'Email hoặc tên đăng nhập đã tồn tại trong hệ thống.' });
+            }
              res.status(400).json({ error: err.message });
         }
     }
@@ -60,7 +63,28 @@ export class TaiKhoanController {
 
             res.json(newEmployee);
         } catch (err: any) {
+            if (err.code === 'P2002') {
+                return res.status(400).json({ error: 'Email hoặc tên đăng nhập đã tồn tại trong hệ thống.' });
+            }
             res.status(400).json({ error: err.message });
+        }
+    }
+
+    async getEmployees(req: Request, res: Response) {
+        try {
+            const employees = await this.service.getEmployees();
+            res.json(employees);
+        } catch (err: any) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    async getWorkers(req: Request, res: Response) {
+        try {
+            const workers = await this.service.getWorkers();
+            res.json(workers);
+        } catch (err: any) {
+            res.status(500).json({ error: err.message });
         }
     }
 }

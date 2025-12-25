@@ -1,25 +1,55 @@
 "use client";
 
-
 import Link from "next/link";
 import { Plus, Search, MoreVertical, FileText, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { mockEmployees } from "@/lib/mock-data";
+import { getEmployees, getWorkers } from "@/lib/api";
+import { useState, useEffect } from "react";
+import { AddEmployeeModal } from "./add-employee-modal";
 
 export default function EmployeesPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [employees, setEmployees] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchEmployees = async () => {
+    try {
+        setLoading(true);
+        const [empData, workerData] = await Promise.all([
+            getEmployees(),
+            getWorkers()
+        ]);
+        setEmployees([...empData, ...workerData]);
+    } catch (error) {
+        console.error("Failed to fetch employees", error);
+    } finally {
+        setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
+
   return (
     <div className="space-y-6">
+      <AddEmployeeModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        onSuccess={() => {
+            fetchEmployees();
+        }} 
+      />
+      
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-gray-900">Nhân viên</h1>
           <p className="text-gray-500">Quản lý nhân sự.</p>
         </div>
-        <Link href="/hr/employees/new">
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white gap-2">
+        <Button onClick={() => setIsModalOpen(true)} className="bg-blue-600 hover:bg-blue-700 text-white gap-2">
             <Plus className="h-4 w-4" />
             Thêm nhân viên
-          </Button>
-        </Link>
+        </Button>
       </div>
 
       {/* Filters */}
@@ -43,28 +73,30 @@ export default function EmployeesPage() {
 
       {/* Table */}
       <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
+        {loading ? (
+            <div className="p-8 text-center text-gray-500">Đang tải dữ liệu...</div>
+        ) : (
         <table className="w-full text-sm text-left">
             <thead className="bg-gray-50 text-gray-700 font-medium border-b">
                 <tr>
                     <th className="px-6 py-4">Họ tên</th>
                     <th className="px-6 py-4">Vị trí</th>
                     <th className="px-6 py-4">Tổ / Nhóm</th>
-                    <th className="px-6 py-4">Người quản lý</th>
-                    <th className="px-6 py-4">Trạng thái</th>
+                    <th className="px-6 py-4">Email / SĐT</th>
                     <th className="px-6 py-4 text-right">Hành động</th>
                 </tr>
             </thead>
             <tbody className="divide-y">
-                {mockEmployees.map((employee) => (
+                {employees.map((employee) => (
                     <tr key={employee.id} className="hover:bg-gray-50/50">
                         <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
                                 <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xs">
-                                    {employee.fullName.split(" ").map(n => n[0]).join("")}
+                                    {employee.fullName?.split(" ").map((n:any) => n[0]).join("") || "NV"}
                                 </div>
                                 <div>
                                     <div className="font-medium text-gray-900">{employee.fullName}</div>
-                                    <div className="text-gray-500 text-xs">{employee.email}</div>
+                                    <div className="text-gray-500 text-xs">{employee.username}</div>
                                 </div>
                             </div>
                         </td>
@@ -79,23 +111,10 @@ export default function EmployeesPage() {
                             )}
                         </td>
                         <td className="px-6 py-4">
-                             {employee.NguoiQuanLy ? (
-                                <div className="flex items-center gap-2">
-                                    <div className="h-5 w-5 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold text-[10px]">
-                                        {employee.NguoiQuanLy.fullName.charAt(0)}
-                                    </div>
-                                    <span className="text-gray-600 text-sm">{employee.NguoiQuanLy.fullName}</span>
-                                </div>
-                            ) : (
-                                <span className="text-gray-400 italic text-xs">--</span>
-                            )}
-                        </td>
-                        <td className="px-6 py-4">
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border
-                                ${employee.trangThaiTaiKhoan === 'active' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 
-                                  'bg-gray-100 text-gray-800'}`}>
-                                {employee.trangThaiTaiKhoan === 'active' ? 'Hoạt động' : 'Đã nghỉ việc'}
-                            </span>
+                             <div className="flex flex-col">
+                                <span className="text-xs text-gray-900">{employee.email}</span>
+                                <span className="text-xs text-gray-500">{employee.phone}</span>
+                             </div>
                         </td>
                         <td className="px-6 py-4 text-right">
                             <div className="flex items-center justify-end gap-2">
@@ -109,8 +128,16 @@ export default function EmployeesPage() {
                         </td>
                     </tr>
                 ))}
+                {employees.length === 0 && (
+                    <tr>
+                        <td colSpan={5} className="px-6 py-8 text-center text-gray-500 italic">
+                            Chưa có nhân viên nào.
+                        </td>
+                    </tr>
+                )}
             </tbody>
         </table>
+        )}
       </div>
     </div>
   );

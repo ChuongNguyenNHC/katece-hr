@@ -9,19 +9,22 @@ const controller = new TaiKhoanController(service);
 
 router.post('/login', controller.login.bind(controller));
 router.post('/register', controller.register.bind(controller));
-
-// API cho Tổ trưởng thêm công nhân
+// API cho Tổ trưởng và Nhân sự thêm công nhân
 router.post('/create-worker', 
     authenticateToken, 
-    requireRole(['Tổ trưởng chuyền', 'To truong', 'To truong chuyen']), 
+    requireRole(['Quan ly nhan su', 'To truong', 'Quan ly xuong']), 
     controller.createWorker.bind(controller)
 );
 
-// API cho Quản lý sản xuất thêm nhân viên
+// API cho Quản lý sản xuất và Nhân sự thêm nhân viên
 router.post('/create-employee', 
     authenticateToken, 
-    requireRole(['Quản lý sản xuất', 'Quan ly xuong']), 
+    requireRole(['Quan ly xuong', 'Quan ly nhan su']), 
     controller.createEmployee.bind(controller)
 );
+
+// Get lists
+router.get('/employees', authenticateToken, controller.getEmployees.bind(controller));
+router.get('/workers', authenticateToken, controller.getWorkers.bind(controller));
 
 export { router as TaiKhoanModule };

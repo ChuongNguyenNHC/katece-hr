@@ -42,7 +42,7 @@ export default function AuthPage() {
                 targetPath = "/FactoryManager/Dashboard";
             } else if (position.includes("Kho")) {
                 targetPath = "/warehouse/materials";
-            } else if (position.includes("Nhan su")) {
+            } else if (position.includes("Quan ly nhan su")) {
                 targetPath = "/hr/dashboard";
             }
 

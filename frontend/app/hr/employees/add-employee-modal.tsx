@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createEmployee } from "@/lib/api";
+import { createWorker } from "@/lib/api";
 import { Loader2, X } from "lucide-react";
 
 interface AddEmployeeModalProps {
@@ -22,7 +22,7 @@ export function AddEmployeeModal({ isOpen, onClose, onSuccess }: AddEmployeeModa
     email: "",
     phone: "",
     cccd: "",
-    position: "Ke toan", 
+    position: "Nhan su", // Default role
     password: "",
   });
 
@@ -34,7 +34,7 @@ export function AddEmployeeModal({ isOpen, onClose, onSuccess }: AddEmployeeModa
     setError("");
 
     try {
-      await createEmployee(formData);
+      await createWorker(formData);
       alert("Thêm nhân viên thành công!");
       onSuccess();
       onClose();
@@ -55,7 +55,7 @@ export function AddEmployeeModal({ isOpen, onClose, onSuccess }: AddEmployeeModa
             <X className="h-5 w-5" />
         </button>
 
-        <h2 className="text-xl font-bold mb-4 text-gray-900">Thêm nhân sự quản lý</h2>
+        <h2 className="text-xl font-bold mb-4 text-gray-900">Thêm nhân sự mới</h2>
         
         {error && (
             <div className="bg-red-50 text-red-600 p-3 rounded-md text-sm mb-4">
@@ -128,13 +128,12 @@ export function AddEmployeeModal({ isOpen, onClose, onSuccess }: AddEmployeeModa
                 value={formData.position}
                 onChange={(e) => setFormData({ ...formData, position: e.target.value })}
             >
-                {/* Exclude 'Công nhân may' */}
                 <option value="Cong nhan">Cong nhan</option>
                 <option value="To truong">To truong</option>
                 <option value="Quan ly nhan su">Quan ly nhan su</option>
                 <option value="Kho">Kho</option>
                 <option value="Quan ly xuong">Quan ly xuong</option>
-            </select> 
+            </select>
           </div>
 
           <div className="space-y-2">
@@ -154,7 +153,7 @@ export function AddEmployeeModal({ isOpen, onClose, onSuccess }: AddEmployeeModa
             </Button>
             <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Thêm nhân viên
+              Thêm nhân sự
             </Button>
           </div>
         </form>

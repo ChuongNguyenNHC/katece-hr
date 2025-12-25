@@ -32,21 +32,28 @@ export class TaiKhoanController {
         }
     }
 
+    async logout(req: Request, res: Response) {
+        res.json({ message: "Logout successful" });
+    }
+
     async createWorker(req: AuthRequest, res: Response) {
         try {
             // Access user info attached by middleware
             const user = req.user;
             if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
-            const { fullName, phone, cccd, username } = req.body;
-
-            const newWorker = await this.service.createWorker(user.id, user.toSanXuatID, {
-                fullName, phone, cccd, username, email: user.email
-            });
-
-            res.json(newWorker);
+             const { fullName, phone, cccd, username, email } = req.body;
+             
+             const newWorker = await this.service.createWorker(user.id, user.toSanXuatID, {
+                 fullName, phone, cccd, username, email
+             });
+             
+             res.json(newWorker);
         } catch (err: any) {
-            res.status(400).json({ error: err.message });
+             if (err.code === 'P2002') {
+                return res.status(400).json({ error: 'Email hoặc tên đăng nhập đã tồn tại trong hệ thống.' });
+            }
+             res.status(400).json({ error: err.message });
         }
     }
 
@@ -60,11 +67,47 @@ export class TaiKhoanController {
 
             res.json(newEmployee);
         } catch (err: any) {
+            if (err.code === 'P2002') {
+                return res.status(400).json({ error: 'Email hoặc tên đăng nhập đã tồn tại trong hệ thống.' });
+            }
             res.status(400).json({ error: err.message });
         }
     }
 
-    async logout(req: Request, res: Response) {
-        res.json({ message: 'Logged out successfully' });
+    async getEmployees(req: Request, res: Response) {
+        try {
+            const employees = await this.service.getEmployees();
+            res.json(employees);
+        } catch (err: any) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    async getWorkers(req: Request, res: Response) {
+        try {
+            const workers = await this.service.getWorkers();
+            res.json(workers);
+        } catch (err: any) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    async assignWorkerToTeam(req: Request, res: Response) {
+        try {
+            const { userId, toSanXuatID } = req.body;
+            const updatedUser = await this.service.assignWorkerToTeam(userId, toSanXuatID);
+            res.json(updatedUser);
+        } catch (err: any) {
+            res.status(400).json({ error: err.message });
+        }
+    }
+
+    async getProductionTeams(req: Request, res: Response) {
+        try {
+            const teams = await this.service.getProductionTeams();
+            res.json(teams);
+        } catch (err: any) {
+            res.status(500).json({ error: err.message });
+        }
     }
 }

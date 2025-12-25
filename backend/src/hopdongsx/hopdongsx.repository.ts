@@ -33,8 +33,6 @@ export class HopDongSXRepository {
                         sanPhamID: item.productID,
                         congDoanID: item.congDoanID, // Set congDoanID
                         trangThai: "Đang chờ"
-                        // Note: soLuong can be added if PHANCONGSANXUAT has it, 
-                        // but it seems the schema doesn't have it on PHANCONGSANXUAT directly.
                     }))
                 });
             }

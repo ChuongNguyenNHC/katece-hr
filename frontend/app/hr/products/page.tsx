@@ -1,19 +1,35 @@
 "use client";
 
-import { useState } from "react";
-import { Plus, Search, Package, Layers, Edit, Trash2, X, Save } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Plus, Package, Layers, Edit, Trash2, X, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { mockProducts, mockStages } from "@/lib/mock-data";
-import { Sanpham, Congdoan } from "@/types/schema";
 
 export default function ProductsPage() {
   const [activeTab, setActiveTab] = useState("Products");
   const [showNewModal, setShowNewModal] = useState(false);
+  const [products, setProducts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   
   // Form State
   const [productName, setProductName] = useState("");
   const [newStages, setNewStages] = useState<{name: string, price: number}[]>([{name: "", price: 0}]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/sanpham');
+      const data = await response.json();
+      setProducts(data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleAddStage = () => {
     setNewStages([...newStages, {name: "", price: 0}]);
@@ -30,11 +46,42 @@ export default function ProductsPage() {
     setNewStages(newStages.filter((_, i) => i !== index));
   };
 
-  const handleCreate = () => {
-     console.log("Creating product:", productName, "with stages:", newStages);
-     setShowNewModal(false);
-     setProductName("");
-     setNewStages([{name: "", price: 0}]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleCreate = async () => {
+     if (!productName.trim()) {
+       alert("Vui lòng nhập tên sản phẩm");
+       return;
+     }
+
+     setIsSubmitting(true);
+     try {
+       const response = await fetch('http://localhost:5000/api/sanpham', {
+         method: 'POST',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify({
+           tenSP: productName,
+           stages: newStages
+            .filter(s => s.name.trim() !== "")
+            .map(s => ({ tenCongDoan: s.name, donGia: s.price }))
+         })
+       });
+
+       if (response.ok) {
+         setShowNewModal(false);
+         setProductName("");
+         setNewStages([{name: "", price: 0}]);
+         fetchProducts();
+       } else {
+         const err = await response.json();
+         alert(err.error || "Lỗi khi tạo sản phẩm");
+       }
+     } catch (error) {
+       console.error("Error creating product:", error);
+       alert("Lỗi kết nối đến máy chủ");
+     } finally {
+       setIsSubmitting(false);
+     }
   };
 
   return (
@@ -76,7 +123,7 @@ export default function ProductsPage() {
         {activeTab === "Products" && (
             <div className="p-0">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-                    {mockProducts.map((product) => (
+                    {products.map((product: any) => (
                         <div key={product.id} className="border rounded-lg p-5 hover:shadow-md transition-all cursor-pointer group">
                              <div className="flex justify-between items-start mb-4">
                                 <div className="p-2 bg-blue-50 rounded-lg text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
@@ -87,14 +134,14 @@ export default function ProductsPage() {
                                 </button>
                             </div>
                             <h3 className="font-bold text-gray-900 text-lg mb-1">{product.tenSP}</h3>
-                            <p className="text-sm text-gray-500 mb-4">Ngày tạo: {product.created_at.split('T')[0]}</p>
+                            <p className="text-sm text-gray-500 mb-4">Ngày tạo: {product.created_at?.split('T')[0]}</p>
                             
                             <div className="space-y-3">
                                 <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                    Công đoạn ({product.CONGDOAN?.length || 0})
+                                    Công đoạn ({product.stages?.length || 0})
                                 </div>
                                 <div className="flex flex-wrap gap-2">
-                                    {product.CONGDOAN?.map(stage => (
+                                    {product.stages?.map((stage: any) => (
                                         <span key={stage.id} className="inline-flex items-center px-2 py-1 rounded bg-gray-100 text-xs font-medium text-gray-700" title={`Giá: ${stage.donGia}`}>
                                             {stage.tenCongDoan}
                                         </span>
@@ -119,9 +166,7 @@ export default function ProductsPage() {
                         </tr>
                     </thead>
                     <tbody className="divide-y">
-                        {mockStages.map((stage) => {
-                            // Reverse lookup to find the product that contains this stage
-                            const product = mockProducts.find(p => p.CONGDOAN?.some(s => s.id === stage.id));
+                        {products.flatMap((p: any) => p.stages.map((s: any) => ({ ...s, productName: p.tenSP }))).map((stage: any) => {
                             return (
                                 <tr key={stage.id} className="hover:bg-gray-50/50">
                                     <td className="px-6 py-4 font-medium text-gray-900 flex items-center gap-2">
@@ -130,12 +175,10 @@ export default function ProductsPage() {
                                     </td>
                                     <td className="px-6 py-4 text-gray-600">{(stage.donGia ?? 0).toLocaleString()} đ</td>
                                     <td className="px-6 py-4 text-gray-600">
-                                         {product ? (
                                             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
                                                 <Package className="h-3 w-3" />
-                                                {product.tenSP}
+                                                {stage.productName}
                                             </span>
-                                         ) : <span className="text-gray-400">-</span>}
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <button className="text-gray-400 hover:text-red-600 transition-colors">
@@ -180,7 +223,7 @@ export default function ProductsPage() {
                         </div>
                         
                         <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2">
-                            {newStages.map((stage, idx) => (
+                            {newStages.map((stage: any, idx: number) => (
                                 <div key={idx} className="flex gap-3 items-start p-3 bg-gray-50 rounded-md border">
                                     <div className="flex-1 space-y-1">
                                         <label className="text-xs text-gray-500">Tên công đoạn</label>
@@ -215,9 +258,19 @@ export default function ProductsPage() {
 
                 <div className="pt-4 flex justify-end gap-2 border-t">
                     <Button variant="outline" onClick={() => setShowNewModal(false)}>Hủy</Button>
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white gap-2" onClick={handleCreate}>
-                        <Save className="h-4 w-4" />
-                        Tạo sản phẩm
+                    <Button 
+                        className="bg-blue-600 hover:bg-blue-700 text-white gap-2" 
+                        onClick={handleCreate}
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? (
+                            <>Đang xử lý...</>
+                        ) : (
+                            <>
+                                <Save className="h-4 w-4" />
+                                Tạo sản phẩm
+                            </>
+                        )}
                     </Button>
                 </div>
             </div>

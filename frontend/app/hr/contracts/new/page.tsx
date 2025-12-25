@@ -1,27 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Save, Plus, Trash2, Calendar, User, FileText } from "lucide-react";
+import { ArrowLeft, Save, Plus, Trash2, Calendar, FileText, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { mockEmployees, mockProducts } from "@/lib/mock-data";
 
 export default function NewContractPage() {
   const router = useRouter();
+  const [products, setProducts] = useState<any[]>([]);
   
   // Form State
   const [formData, setFormData] = useState({
     tenHopDongSX: "",
-    nhanVienID: "",
     ngayBatDau: "",
     ngayKetThuc: "",
-    loaiLuong: "Fixed",
-    giaTriLuong: 0,
   });
 
-  const [items, setItems] = useState<{productID: string, quantity: number}[]>([
-    { productID: "", quantity: 1 }
+  const [items, setItems] = useState<{productID: string, congDoanID: string, quantity: number}[]>([
+    { productID: "", congDoanID: "", quantity: 1 }
   ]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/sanpham');
+      const data = await response.json();
+      setProducts(data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -29,13 +40,19 @@ export default function NewContractPage() {
   };
 
   const handleAddItem = () => {
-    setItems([...items, { productID: "", quantity: 1 }]);
+    setItems([...items, { productID: "", congDoanID: "", quantity: 1 }]);
   };
 
-  const handleItemChange = (index: number, field: 'productID' | 'quantity', value: string | number) => {
+  const handleItemChange = (index: number, field: string, value: string | number) => {
     const updated = [...items];
     // @ts-ignore
     updated[index][field] = value;
+    
+    // If product changed, reset stage
+    if (field === 'productID') {
+        updated[index].congDoanID = "";
+    }
+    
     setItems(updated);
   };
 
@@ -43,11 +60,38 @@ export default function NewContractPage() {
     setItems(items.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Creating Contract:", { ...formData, items });
-    // Mock save delay
-    setTimeout(() => router.push('/hr/contracts'), 800);
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch('http://localhost:5000/api/hopdongsx', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          items: items.filter(item => item.productID !== "")
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Không thể tạo hợp đồng");
+      }
+
+      const result = await response.json();
+      console.log("Contract created:", result);
+      router.push('/hr/contracts');
+    } catch (error: any) {
+      console.error("Error creating contract:", error);
+      alert(error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -79,6 +123,7 @@ export default function NewContractPage() {
                         required
                         className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 text-sm"
                         placeholder="vd: Lô hàng A-2023"
+                        value={formData.tenHopDongSX}
                         onChange={handleInputChange}
                     />
                 </div>
@@ -95,6 +140,7 @@ export default function NewContractPage() {
                         name="ngayBatDau"
                         required
                         className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 text-sm"
+                        value={formData.ngayBatDau}
                         onChange={handleInputChange}
                     />
                 </div>
@@ -109,6 +155,7 @@ export default function NewContractPage() {
                         name="ngayKetThuc"
                         required
                         className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 text-sm"
+                        value={formData.ngayKetThuc}
                         onChange={handleInputChange}
                     />
                 </div>
@@ -130,51 +177,84 @@ export default function NewContractPage() {
             </div>
 
             <div className="space-y-4">
-                {items.map((item, index) => (
-                    <div key={index} className="flex gap-4 items-end p-4 bg-gray-50 rounded-lg border">
-                        <div className="flex-1 space-y-2">
-                            <label className="text-xs font-medium text-gray-500">Sản phẩm</label>
-                            <select 
-                                className="w-full px-3 py-2 border rounded-md text-sm bg-white"
-                                value={item.productID}
-                                onChange={(e) => handleItemChange(index, 'productID', e.target.value)}
-                                required
+                {items.map((item, index) => {
+                    const selectedProduct = products.find((p: any) => p.id === item.productID);
+                    return (
+                        <div key={index} className="flex flex-col md:flex-row gap-4 items-end p-4 bg-gray-50 rounded-lg border">
+                            <div className="flex-1 space-y-2 w-full">
+                                <label className="text-xs font-medium text-gray-500">Sản phẩm</label>
+                                <select 
+                                    className="w-full px-3 py-2 border rounded-md text-sm bg-white"
+                                    value={item.productID}
+                                    onChange={(e) => handleItemChange(index, 'productID', e.target.value)}
+                                    required
+                                >
+                                    <option value="">Chọn sản phẩm...</option>
+                                    {products.map((p: any) => (
+                                        <option key={p.id} value={p.id}>{p.tenSP}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="flex-1 space-y-2 w-full">
+                                <label className="text-xs font-medium text-gray-500 flex items-center gap-1">
+                                    <Layers className="h-3 w-3" />
+                                    Công đoạn
+                                </label>
+                                <select 
+                                    className="w-full px-3 py-2 border rounded-md text-sm bg-white"
+                                    value={item.congDoanID}
+                                    onChange={(e) => handleItemChange(index, 'congDoanID', e.target.value)}
+                                    required
+                                    disabled={!item.productID}
+                                >
+                                    <option value="">Chọn công đoạn...</option>
+                                    {selectedProduct?.stages?.map((s: any) => (
+                                        <option key={s.id} value={s.id}>{s.tenCongDoan} ({(s.donGia ?? 0).toLocaleString()} đ)</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="w-32 space-y-2 w-full md:w-32">
+                                <label className="text-xs font-medium text-gray-500">Số lượng</label>
+                                <input 
+                                    type="number" 
+                                    min="1"
+                                    className="w-full px-3 py-2 border rounded-md text-sm"
+                                    value={item.quantity}
+                                    onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value))}
+                                    required
+                                />
+                            </div>
+                            <button 
+                                type="button" 
+                                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-md mb-0.5"
+                                onClick={() => handleRemoveItem(index)}
+                                disabled={items.length === 1}
                             >
-                                <option value="">Chọn sản phẩm...</option>
-                                {mockProducts.map(p => (
-                                    <option key={p.id} value={p.id}>{p.tenSP}</option>
-                                ))}
-                            </select>
+                                <Trash2 className="h-5 w-5" />
+                            </button>
                         </div>
-                        <div className="w-32 space-y-2">
-                            <label className="text-xs font-medium text-gray-500">Số lượng</label>
-                            <input 
-                                type="number" 
-                                min="1"
-                                className="w-full px-3 py-2 border rounded-md text-sm"
-                                value={item.quantity}
-                                onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value))}
-                                required
-                            />
-                        </div>
-                        <button 
-                            type="button" 
-                            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-md mb-0.5"
-                            onClick={() => handleRemoveItem(index)}
-                            disabled={items.length === 1}
-                        >
-                            <Trash2 className="h-5 w-5" />
-                        </button>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </div>
 
         <div className="flex justify-end gap-3">
             <Button type="button" variant="outline" onClick={() => router.back()}>Hủy</Button>
-            <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white gap-2 px-8">
-                <Save className="h-4 w-4" />
-                Lưu hợp đồng
+            <Button 
+              type="submit" 
+              className="bg-blue-600 hover:bg-blue-700 text-white gap-2 px-8"
+              disabled={isSubmitting}
+            >
+                {isSubmitting ? (
+                  <>Đang lưu...</>
+                ) : (
+                  <>
+                    <Save className="h-4 w-4" />
+                    Lưu hợp đồng
+                  </>
+                )}
             </Button>
         </div>
       </form>

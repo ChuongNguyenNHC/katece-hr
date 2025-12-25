@@ -15,25 +15,45 @@ interface CreateScheduleInput {
 
 export const createSchedule = async (data: CreateScheduleInput): Promise<{ lichLam: LICHLAM, chiTiet: CHITIETLICHLAM }> => {
     return prisma.$transaction(async (tx) => {
-        // 1. Create LICHLAM record
-        const lichLam = await tx.lICHLAM.create({
-            data: {
+        // 1. Check if a LICHLAM record with the same time range already exists
+        let lichLam = await tx.lICHLAM.findFirst({
+            where: {
                 gioBatDau: data.gioBatDau,
-                gioKetThuc: data.gioKetThuc,
-                diaDiem: data.diaDiem,
-                ghiChu: data.ghiChu,
-                trangThai: 'Registered', // Initial status
+                gioKetThuc: data.gioKetThuc
             }
         });
 
-        // 2. Create CHITIETLICHLAM record linking Employee and Schedule
-        const chiTiet = await tx.cHITIETLICHLAM.create({
-            data: {
+        // 2. If not, create a new LICHLAM record
+        if (!lichLam) {
+            lichLam = await tx.lICHLAM.create({
+                data: {
+                    gioBatDau: data.gioBatDau,
+                    gioKetThuc: data.gioKetThuc,
+                    diaDiem: data.diaDiem,
+                    ghiChu: data.ghiChu,
+                    trangThai: 'Registered', // Initial status
+                }
+            });
+        }
+
+        // 3. Check if the worker is already linked to this shift
+        let chiTiet = await tx.cHITIETLICHLAM.findFirst({
+            where: {
                 nhanVienID: data.nhanVienID,
-                lichLamID: lichLam.id,
-                ngayLam: data.ngayLam,
+                lichLamID: lichLam.id
             }
         });
+
+        // 4. If not linked, create a new CHITIETLICHLAM record
+        if (!chiTiet) {
+            chiTiet = await tx.cHITIETLICHLAM.create({
+                data: {
+                    nhanVienID: data.nhanVienID,
+                    lichLamID: lichLam.id,
+                    ngayLam: data.ngayLam,
+                }
+            });
+        }
 
         return { lichLam, chiTiet };
     });

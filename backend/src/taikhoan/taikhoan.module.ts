@@ -12,16 +12,16 @@ router.post('/register', controller.register.bind(controller));
 router.post('/logout', controller.logout.bind(controller));
 
 // API cho Tổ trưởng thêm công nhân
-router.post('/create-worker', 
-    authenticateToken, 
-    requireRole(['Tổ trưởng chuyền', 'To truong', 'To truong chuyen']), 
+router.post('/create-worker',
+    authenticateToken,
+    requireRole(['To Truong']),
     controller.createWorker.bind(controller)
 );
 
 // API cho Quản lý sản xuất thêm nhân viên
-router.post('/create-employee', 
-    authenticateToken, 
-    requireRole(['Quản lý sản xuất', 'Quan ly xuong']), 
+router.post('/create-employee',
+    authenticateToken,
+    requireRole(['Quan Ly Xuong']),
     controller.createEmployee.bind(controller)
 );
 

@@ -34,26 +34,26 @@ export class TaiKhoanController {
 
     async createWorker(req: AuthRequest, res: Response) {
         try {
-             // Access user info attached by middleware
-             const user = req.user;
-             if (!user) return res.status(401).json({ error: 'Unauthorized' });
+            // Access user info attached by middleware
+            const user = req.user;
+            if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
-             const { fullName, phone, cccd, username } = req.body;
-             
-             const newWorker = await this.service.createWorker(user.id, user.toSanXuatID, {
-                 fullName, phone, cccd, username, email: user.email
-             });
-             
-             res.json(newWorker);
+            const { fullName, phone, cccd, username } = req.body;
+
+            const newWorker = await this.service.createWorker(user.id, user.toSanXuatID, {
+                fullName, phone, cccd, username, email: user.email
+            });
+
+            res.json(newWorker);
         } catch (err: any) {
-             res.status(400).json({ error: err.message });
+            res.status(400).json({ error: err.message });
         }
     }
 
     async createEmployee(req: Request, res: Response) {
         try {
             const { fullName, phone, cccd, username, email, position, password } = req.body;
-            
+
             const newEmployee = await this.service.createEmployee({
                 fullName, phone, cccd, username, email, position, password
             });
@@ -62,5 +62,9 @@ export class TaiKhoanController {
         } catch (err: any) {
             res.status(400).json({ error: err.message });
         }
+    }
+
+    async logout(req: Request, res: Response) {
+        res.json({ message: 'Logged out successfully' });
     }
 }

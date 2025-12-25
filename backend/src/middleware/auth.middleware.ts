@@ -37,6 +37,7 @@ export const requireRole = (roles: string[]) => {
         }
 
         if (!roles.includes(req.user.position)) {
+            console.log(`[AUTH DEBUG] Blocked Access. Required: ${JSON.stringify(roles)}, User Position: '${req.user.position}'`);
             return res.status(403).json({ error: `Access denied. Requires one of roles: ${roles.join(', ')}` });
         }
 

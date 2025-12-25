@@ -25,3 +25,51 @@ export const createUser = async (data: {
 }) => {
   return prisma.tAIKHOAN.create({ data });
 };
+
+export const getEmployees = async () => {
+  const users = await prisma.tAIKHOAN.findMany({
+    where: {
+      position: {
+        notIn: ['Cong nhan', 'Cong nhan may']
+      }
+    },
+    include: {
+      TOSANXUAT_TAIKHOAN_toSanXuatIDToTOSANXUAT: true
+    }
+  });
+
+  // Map the ugly relation name to a nicer one
+  return users.map(user => ({
+    ...user,
+    TOSANXUAT: user.TOSANXUAT_TAIKHOAN_toSanXuatIDToTOSANXUAT
+  }));
+};
+
+export const getWorkers = async () => {
+    const users = await prisma.tAIKHOAN.findMany({
+      where: {
+        position: {
+            in: ['Cong nhan', 'Cong nhan may']
+        }
+      },
+      include: {
+        TOSANXUAT_TAIKHOAN_toSanXuatIDToTOSANXUAT: true
+      }
+    });
+
+    return users.map(user => ({
+        ...user,
+        TOSANXUAT: user.TOSANXUAT_TAIKHOAN_toSanXuatIDToTOSANXUAT
+      }));
+  };
+
+export const updateUserTeam = async (userId: string, toSanXuatID: string) => {
+    return prisma.tAIKHOAN.update({
+        where: { id: userId },
+        data: { toSanXuatID }
+    });
+};
+
+export const getProductionTeams = async () => {
+    return prisma.tOSANXUAT.findMany();
+};

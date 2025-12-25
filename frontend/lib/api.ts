@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:4000/api';
+const API_URL = 'http://localhost:5000/api';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -42,6 +42,26 @@ export const createEmployee = async (data: {
 }) => {
   const response = await api.post('/taikhoan/create-employee', data);
   return response.data;
+};
+
+export const getEmployees = async () => {
+    const response = await api.get('/taikhoan/employees');
+    return response.data;
+};
+
+export const getWorkers = async () => {
+    const response = await api.get('/taikhoan/workers');
+    return response.data;
+};
+
+export const assignWorkerToTeam = async (userId: string, toSanXuatID: string) => {
+    const response = await api.post('/taikhoan/assign-worker-team', { userId, toSanXuatID });
+    return response.data;
+};
+
+export const getProductionTeams = async () => {
+    const response = await api.get('/taikhoan/production-teams');
+    return response.data;
 };
 
 export default api;

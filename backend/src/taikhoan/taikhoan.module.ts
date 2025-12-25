@@ -12,17 +12,23 @@ router.post('/register', controller.register.bind(controller));
 router.post('/logout', controller.logout.bind(controller));
 
 // API cho Tổ trưởng thêm công nhân
-router.post('/create-worker',
-    authenticateToken,
-    requireRole(['To Truong']),
+router.post('/create-worker', 
+    authenticateToken, 
+    requireRole(['Quan ly nhan su', 'To truong', 'Quan ly xuong']), 
     controller.createWorker.bind(controller)
 );
 
-// API cho Quản lý sản xuất thêm nhân viên
-router.post('/create-employee',
-    authenticateToken,
-    requireRole(['Quan Ly Xuong']),
+// API cho Quản lý sản xuất và Nhân sự thêm nhân viên
+router.post('/create-employee', 
+    authenticateToken, 
+    requireRole(['Quan ly xuong', 'Quan ly nhan su']), 
     controller.createEmployee.bind(controller)
 );
+
+// Get lists
+router.get('/employees', authenticateToken, controller.getEmployees.bind(controller));
+router.get('/workers', authenticateToken, controller.getWorkers.bind(controller));
+router.get('/production-teams', authenticateToken, controller.getProductionTeams.bind(controller));
+router.post('/assign-worker-team', authenticateToken, requireRole(['Quan ly xuong', 'Quan ly nhan su']), controller.assignWorkerToTeam.bind(controller));
 
 export { router as TaiKhoanModule };

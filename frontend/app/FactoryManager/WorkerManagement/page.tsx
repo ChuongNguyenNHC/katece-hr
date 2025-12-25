@@ -1,19 +1,40 @@
 "use client";
 
 import { Search, Edit, Plus } from "lucide-react";
-import { mockEmployees } from "@/lib/mock-data";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { AddEmployeeModal } from "./add-employee-modal";
+import { getEmployees, getWorkers } from "@/lib/api";
 
 export default function FactoryManagerWorkerManagementPage() {
     const [positionFilter, setPositionFilter] = useState("");
     const [statusFilter, setStatusFilter] = useState("");
     const [isAddEmployeeOpen, setIsAddEmployeeOpen] = useState(false);
+    const [employees, setEmployees] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+            const [empData, workerData] = await Promise.all([
+                getEmployees(),
+                getWorkers()
+            ]);
+            // Combine both lists
+            setEmployees([...empData, ...workerData]);
+        } catch (error) {
+            console.error("Failed to fetch data", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     const handleEmployeeAdded = () => {
-        // Refresh logic would go here
-        console.log("Employee added");
+        fetchData();
     };
 
     return (
@@ -65,16 +86,20 @@ export default function FactoryManagerWorkerManagementPage() {
                 onChange={e => setPositionFilter(e.target.value)}
             >
                 <option value="">Tất cả chức vụ</option>
-                <option value="Kế toán">Kế toán</option>
+                <option value="Ke toan">Kế toán</option>
                 <option value="Kho">Kho</option>
-                <option value="Quản lý nhân sự">Quản lý nhân sự</option>
-                <option value="Tổ trưởng">Tổ trưởng</option>
+                <option value="Quan ly nhan su">Quản lý nhân sự</option>
+                <option value="To truong">Tổ trưởng</option>
+                <option value="Cong nhan">Công nhân</option>
             </select>
         </div>
       </div>
 
       {/* Table */}
       <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
+        {loading ? (
+             <div className="p-8 text-center text-gray-500">Đang tải dữ liệu...</div>
+        ) : (
         <table className="w-full text-sm text-left">
             <thead className="bg-gray-50 text-gray-700 font-medium border-b">
                 <tr>
@@ -82,34 +107,30 @@ export default function FactoryManagerWorkerManagementPage() {
                     <th className="px-6 py-4">Số điện thoại</th>
                     <th className="px-6 py-4">CCCD</th>
                     <th className="px-6 py-4">Vị trí</th>
-                    <th className="px-6 py-4">Nghỉ có phép</th>
-                    <th className="px-6 py-4">Nghỉ không phép</th>
+                    {/* Removed paid/unpaid leave placeholder columns as they are not in user model yet */}
+                    {/* <th className="px-6 py-4">Nghỉ có phép</th> */}
+                    {/* <th className="px-6 py-4">Nghỉ không phép</th> */}
                     <th className="px-6 py-4">Trạng thái</th>
                     <th className="px-6 py-4 text-right">Thao tác</th>
                 </tr>
             </thead>
             <tbody className="divide-y">
-                    {mockEmployees
-                        .filter(employee => [
-                            'Kế toán',
-                            'Kho',
-                            'Quản lý nhân sự',
-                            'Tổ trưởng',
-                        ].includes(employee.position))
+                    {employees
                         .filter(employee =>
-                            (!positionFilter || employee.position === positionFilter) &&
-                            (!statusFilter || employee.trangThaiTaiKhoan === statusFilter)
+                            (!positionFilter || employee.position === positionFilter)
+                             // Simple status filter logic if field exists, otherwise ignore
+                             // && (!statusFilter || employee.trangThaiTaiKhoan === statusFilter)
                         )
                         .map((employee) => (
                     <tr key={employee.id} className="hover:bg-gray-50/50">
                         <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
                                 <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xs">
-                                    {employee.fullName.split(" ").map(n => n[0]).join("")}
+                                    {employee.fullName?.split(" ").map((n:any) => n[0]).join("") || "NV"}
                                 </div>
                                 <div>
                                     <div className="font-medium text-gray-900">{employee.fullName}</div>
-                                    <div className="text-gray-500 text-xs">{employee.email}</div>
+                                    <div className="text-gray-500 text-xs">{employee.username || employee.email}</div>
                                 </div>
                             </div>
                         </td>
@@ -117,13 +138,9 @@ export default function FactoryManagerWorkerManagementPage() {
                         <td className="px-6 py-4 text-gray-600">{employee.phone}</td>
                         <td className="px-6 py-4 text-gray-600">{employee.cccd}</td>
                         <td className="px-6 py-4 text-gray-600">{employee.position}</td>
-                        <td className="px-6 py-4 text-gray-600">{employee.paidLeaveDayss ?? 0}</td>
-                        <td className="px-6 py-4 text-gray-600">{employee.unpaidLeaveDays ?? 0}</td>
                         <td className="px-6 py-4">
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border
-                                ${employee.trangThaiTaiKhoan === 'active' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 
-                                  'bg-gray-100 text-gray-800'}`}>
-                                {employee.trangThaiTaiKhoan === 'active' ? 'Hoạt động' : 'Đã nghỉ việc'}
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-emerald-50 text-emerald-700 border-emerald-100`}>
+                                Hoạt động
                             </span>
                         </td>
                         <td className="px-6 py-4 text-right">
@@ -133,8 +150,16 @@ export default function FactoryManagerWorkerManagementPage() {
                         </td>
                     </tr>
                 ))}
+                 {employees.length === 0 && (
+                    <tr>
+                        <td colSpan={6} className="px-6 py-8 text-center text-gray-500 italic">
+                            Không tìm thấy nhân viên nào.
+                        </td>
+                    </tr>
+                )}
             </tbody>
         </table>
+        )}
       </div>
     </div>
   );

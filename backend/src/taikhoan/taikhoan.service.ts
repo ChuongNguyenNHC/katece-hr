@@ -38,12 +38,13 @@ export class TaiKhoanService {
         position: string;
         phone: string;
         cccd: string;
-    })  {
+    }) {
         const hashedPassword = await bcrypt.hash(input.password, 10);
         const user = await repository.createUser({
-            ...input, password: hashedPassword });
-            return user;
-        }
+            ...input, password: hashedPassword
+        });
+        return user;
+    }
 
     async createWorker(leaderId: string, leaderToSanXuatID: string | null | undefined, input: {
         fullName: string;
@@ -55,7 +56,7 @@ export class TaiKhoanService {
 
         // Default password for workers (can be changed later)
         const hashedPassword = await bcrypt.hash("123456", 10);
-        
+
         return repository.createUser({
             ...input,
             email: input.email,

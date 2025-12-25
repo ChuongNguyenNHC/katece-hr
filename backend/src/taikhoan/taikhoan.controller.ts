@@ -38,9 +38,9 @@ export class TaiKhoanController {
 
     async createWorker(req: AuthRequest, res: Response) {
         try {
-             // Access user info attached by middleware
-             const user = req.user;
-             if (!user) return res.status(401).json({ error: 'Unauthorized' });
+            // Access user info attached by middleware
+            const user = req.user;
+            if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
              const { fullName, phone, cccd, username, email } = req.body;
              
@@ -60,7 +60,7 @@ export class TaiKhoanController {
     async createEmployee(req: Request, res: Response) {
         try {
             const { fullName, phone, cccd, username, email, position, password } = req.body;
-            
+
             const newEmployee = await this.service.createEmployee({
                 fullName, phone, cccd, username, email, position, password
             });

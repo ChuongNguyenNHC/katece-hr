@@ -22,7 +22,9 @@ import {
   UserRoundPen,
   ContactRound,
   ReceiptText,
-  UserCog
+  UserCog,
+  HandCoins,
+  Newspaper
 } from "lucide-react";
 
 type SidebarItem = {
@@ -37,6 +39,8 @@ const employeeSidebarItems: SidebarItem[] = [
   { icon: Home, label: "Trang chủ", href: "/employee/dashboard" },
   { icon: Calendar, label: "Lịch làm việc", href: "/employee/schedule" },
   { icon: User, label: "Hồ sơ", href: "/employee/profile" },
+  { icon: HandCoins, label: "Thu nhập", href: "/employee/income" },
+  { icon: Newspaper, label: "Yêu cầu", href: "/employee/requests" }
 ];
 
 // Nhân sự
@@ -90,12 +94,12 @@ export function Sidebar() {
   const isFactoryManager = pathname.startsWith("/FactoryManager");
   const isWarehouse = pathname.startsWith("/warehouse");
 
-  const sidebarItems = isHr 
-    ? hrSidebarItems 
+  const sidebarItems = isHr
+    ? hrSidebarItems
     : isTeamLeader
       ? teamLeaderSidebarItems
-      : isAccountant 
-        ? accountantSidebarItems 
+      : isAccountant
+        ? accountantSidebarItems
         : isEmployee
           ? employeeSidebarItems
           : isFactoryManager
@@ -109,12 +113,12 @@ export function Sidebar() {
       <div className="flex h-full flex-col px-4 py-6">
         {/* Logo */}
         <div className="mb-8 flex items-center gap-2 px-2">
-            <div className="relative h-12 w-full flex items-center">
-             <span className="text-2xl font-extrabold text-blue-950 flex items-center">
-                <span className="text-blue-600 mr-1">KateceHR</span>
-                <span className="bg-blue-600 text-white rounded-md px-2 py-0.5 text-sm ml-1 font-bold">HR</span>
-             </span>
-            </div>
+          <div className="relative h-12 w-full flex items-center">
+            <span className="text-2xl font-extrabold text-blue-950 flex items-center">
+              <span className="text-blue-600 mr-1">KateceHR</span>
+              <span className="bg-blue-600 text-white rounded-md px-2 py-0.5 text-sm ml-1 font-bold">HR</span>
+            </span>
+          </div>
         </div>
 
         {/* Main Navigation */}
@@ -146,7 +150,7 @@ export function Sidebar() {
 
         {/* Secondary Navigation */}
         <div className="mt-8 border-t pt-4 space-y-2">
-            {/* Empty for now */}
+          {/* Empty for now */}
         </div>
 
         {/* User Profile */}
@@ -163,23 +167,23 @@ export function Sidebar() {
               <p className="truncate text-sm font-bold text-gray-800">
                 {isHr ? "Nguyễn Văn B" : isTeamLeader ? "Trần Thị C (Tổ trưởng)" : "Nguyễn Văn A"}
               </p>
-               <Link href={isHr ? "/hr/profile" : isTeamLeader ? "/team-leader/profile" : "/employee/profile"} className="text-xs font-medium text-gray-500 hover:text-blue-600 flex items-center gap-2 pl-1 mb-1 mt-1">
-                  <User className="h-3 w-3" />
-                  Xem hồ sơ
+              <Link href={isHr ? "/hr/profile" : isTeamLeader ? "/team-leader/profile" : "/employee/profile"} className="text-xs font-medium text-gray-500 hover:text-blue-600 flex items-center gap-2 pl-1 mb-1 mt-1">
+                <User className="h-3 w-3" />
+                Xem hồ sơ
               </Link>
-               {(isHr || isTeamLeader) && (
-                  <>
-                    <Link href={isHr ? "/hr/income" : "/team-leader/income"} className="text-xs font-medium text-gray-500 hover:text-blue-600 flex items-center gap-2 pl-1 mb-1">
-                        <DollarSign className="h-3 w-3" />
-                        Thu nhập
-                    </Link>
-                     <Link href={isHr ? "/hr/my-schedule" : "/team-leader/my-schedule"} className="text-xs font-medium text-gray-500 hover:text-blue-600 flex items-center gap-2 pl-1 mb-1">
-                        <Calendar className="h-3 w-3" />
-                        Lịch chấm công
-                    </Link>
-                  </>
-               )}
-               <button className="flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-red-500 transition-colors mt-2">
+              {(isHr || isTeamLeader) && (
+                <>
+                  <Link href={isHr ? "/hr/income" : "/team-leader/income"} className="text-xs font-medium text-gray-500 hover:text-blue-600 flex items-center gap-2 pl-1 mb-1">
+                    <DollarSign className="h-3 w-3" />
+                    Thu nhập
+                  </Link>
+                  <Link href={isHr ? "/hr/my-schedule" : "/team-leader/my-schedule"} className="text-xs font-medium text-gray-500 hover:text-blue-600 flex items-center gap-2 pl-1 mb-1">
+                    <Calendar className="h-3 w-3" />
+                    Lịch chấm công
+                  </Link>
+                </>
+              )}
+              <button className="flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-red-500 transition-colors mt-2">
                 <LogOut className="h-3 w-3" />
                 Đăng xuất
               </button>

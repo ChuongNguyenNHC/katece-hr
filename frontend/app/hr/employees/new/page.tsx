@@ -17,8 +17,8 @@ export default function NewEmployeePage() {
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">Add New Employee</h1>
-        <p className="text-gray-500">Enter the details of the new employee.</p>
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900">Thêm nhân viên mới</h1>
+        <p className="text-gray-500">Nhập thông tin của nhân viên mới</p>
       </div>
       
       <div className="bg-white p-6 rounded-lg shadow-sm border">

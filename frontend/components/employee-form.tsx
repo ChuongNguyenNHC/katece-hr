@@ -33,50 +33,50 @@ export function EmployeeForm({ initialData, onSubmit }: EmployeeFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
+   <form onSubmit={handleSubmit} className="space-y-8">
       {/* Profile Photo Section (Visual only) */}
       <div className="flex items-center gap-6">
         <div className="h-24 w-24 rounded-full bg-gray-100 flex items-center justify-center border-2 border-dashed border-gray-300 text-gray-400">
              <Camera className="h-8 w-8" />
         </div>
         <div>
-            <h3 className="text-sm font-medium text-gray-900">Profile Photo</h3>
-            <p className="text-xs text-gray-500 mb-3">Upload a professional photo for the employee profile.</p>
+            <h3 className="text-sm font-medium text-gray-900">Ảnh hồ sơ</h3>
+            <p className="text-xs text-gray-500 mb-3">Tải lên ảnh thẻ chuyên nghiệp cho hồ sơ nhân viên.</p>
             <Button type="button" variant="outline" size="sm" className="gap-2">
                 <Upload className="h-3 w-3" />
-                Upload Photo
+                Tải ảnh lên
             </Button>
         </div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
         <div className="space-y-2 col-span-2 md:col-span-1">
-            <label className="text-sm font-medium text-gray-700">Full Name</label>
+            <label className="text-sm font-medium text-gray-700">Họ và tên</label>
             <input 
                 name="fullName"
                 value={formData.fullName}
                 onChange={handleChange}
                 required
                 className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                placeholder="e.g. John Doe"
+                placeholder="VD: Nguyễn Văn A"
             />
         </div>
         
         <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Username</label>
+            <label className="text-sm font-medium text-gray-700">Tên đăng nhập</label>
             <input 
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
                 required
                 className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                placeholder="jdoe"
+                placeholder="nguyenvan_a"
                 disabled={!!initialData?.id} // Disable username edit if updating
             />
         </div>
 
         <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Email Address</label>
+            <label className="text-sm font-medium text-gray-700">Email</label>
             <input 
                 name="email"
                 type="email"
@@ -84,22 +84,22 @@ export function EmployeeForm({ initialData, onSubmit }: EmployeeFormProps) {
                 onChange={handleChange}
                 required
                 className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                placeholder="john.doe@company.com"
+                placeholder="nguyen.van.a@congty.com"
             />
         </div>
         <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Phone Number</label>
+            <label className="text-sm font-medium text-gray-700">Số điện thoại</label>
             <input 
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                placeholder="+1 (555) 000-0000"
+                placeholder="0901234567"
             />
         </div>
         
         <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">CCCD (ID Card)</label>
+            <label className="text-sm font-medium text-gray-700">Số CCCD/CMND</label>
             <input 
                 name="cccd"
                 value={formData.cccd}
@@ -111,33 +111,45 @@ export function EmployeeForm({ initialData, onSubmit }: EmployeeFormProps) {
         </div>
 
         <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Position</label>
-            <input 
+            <label className="text-sm font-medium text-gray-700">Vị trí / Chức vụ</label>
+            <select 
                 name="position"
                 value={formData.position}
                 onChange={handleChange}
                 required
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                placeholder="e.g. Software Engineer"
-            />
+                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white"
+            >
+                <option value="" disabled>-- Chọn vị trí --</option>
+                <option value="Công nhân may">Công nhân may</option>
+                <option value="Tổ trưởng chuyền">Tổ trưởng chuyền</option>
+                <option value="Thợ cắt">Thợ cắt</option>
+                <option value="KCS">KCS (Kiểm tra chất lượng)</option>
+                <option value="Thợ là">Thợ là</option>
+                <option value="Nhân viên kho">Nhân viên kho</option>
+                <option value="Kỹ thuật chuyền">Kỹ thuật chuyền</option>
+                <option value="Quản lý sản xuất">Quản lý sản xuất</option>
+                <option value="Kế toán">Kế toán</option>
+                <option value="Nhân sự">Nhân sự</option>
+                <option value="Bảo vệ">Bảo vệ</option>
+            </select>
         </div>
 
         <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Status</label>
+            <label className="text-sm font-medium text-gray-700">Trạng thái</label>
             <select 
                 name="trangThaiTaiKhoan"
                 value={formData.trangThaiTaiKhoan}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white"
             >
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
+                <option value="active">Đang hoạt động</option>
+                <option value="inactive">Ngưng hoạt động</option>
             </select>
         </div>
         
         {!initialData?.id && (
             <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Initial Password</label>
+                <label className="text-sm font-medium text-gray-700">Mật khẩu khởi tạo</label>
                 <input 
                     name="password"
                     type="password"
@@ -152,9 +164,9 @@ export function EmployeeForm({ initialData, onSubmit }: EmployeeFormProps) {
       </div>
 
       <div className="flex justify-end gap-3 pt-4 border-t">
-        <Button variant="outline" type="button" onClick={() => window.history.back()}>Cancel</Button>
+        <Button variant="outline" type="button" onClick={() => window.history.back()}>Hủy</Button>
         <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white min-w-[120px]">
-            {initialData?.id ? "Update Employee" : "Create Employee"}
+            {initialData?.id ? "Cập nhật" : "Thêm mới"}
         </Button>
       </div>
     </form>

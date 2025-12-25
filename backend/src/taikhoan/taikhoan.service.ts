@@ -32,12 +32,13 @@ export class TaiKhoanService {
         position: string;
         phone: string;
         cccd: string;
-    })  {
+    }) {
         const hashedPassword = await bcrypt.hash(input.password, 10);
         const user = await repository.createUser({
-            ...input, password: hashedPassword });
-            return user;
-        }
+            ...input, password: hashedPassword
+        });
+        return user;
+    }
 
     async createWorker(leaderId: string, leaderToSanXuatID: string | null | undefined, input: {
         fullName: string;
@@ -52,12 +53,12 @@ export class TaiKhoanService {
 
         // Default password for workers (can be changed later)
         const hashedPassword = await bcrypt.hash("123456", 10);
-        
+
         return repository.createUser({
             ...input,
             email: input.email,
             password: hashedPassword,
-            position: "Công nhân may", // Hardcoded role for workers added by Team Leader
+            position: "Cong Nhan May", // Hardcoded role for workers added by Team Leader
             toSanXuatID: leaderToSanXuatID
         });
     }
@@ -72,7 +73,7 @@ export class TaiKhoanService {
         password?: string;
     }) {
         // Prevent creating "Worker" roles via this API (Team Leader responsibility)
-        if (input.position === "Công nhân may") {
+        if (input.position === "Cong Nhan May") {
             throw new Error("Quản lý xưởng không được phép thêm Công nhân may. Vui lòng để Tổ trưởng thực hiện.");
         }
 
@@ -83,5 +84,5 @@ export class TaiKhoanService {
             ...input,
             password: hashedPassword
         });
-    } 
+    }
 }

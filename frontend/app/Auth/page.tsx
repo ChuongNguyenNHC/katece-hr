@@ -32,17 +32,17 @@ export default function AuthPage() {
             const position = result.user?.position || "";
             let targetPath = "/employee/dashboard";
 
-            if (position.includes("Cong nhan")) {
+            if (position.includes("Cong Nhan")) {
                 targetPath = "/employee/dashboard";
-            } else if (position.includes("To truong")) {
+            } else if (position.includes("To Truong")) {
                 targetPath = "/team-leader/dashboard";
-            } else if (position.includes("Ke toan")) {
+            } else if (position.includes("Ke Toan")) {
                 targetPath = "/Accountant/EditPayroll";
-            } else if (position.includes("Quan ly xuong")) {
+            } else if (position.includes("Quan Ly Xuong")) {
                 targetPath = "/FactoryManager/Dashboard";
             } else if (position.includes("Kho")) {
                 targetPath = "/warehouse/materials";
-            } else if (position.includes("Nhan su")) {
+            } else if (position.includes("Nhan Su")) {
                 targetPath = "/hr/dashboard";
             }
 

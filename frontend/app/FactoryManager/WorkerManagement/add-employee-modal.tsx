@@ -22,7 +22,7 @@ export function AddEmployeeModal({ isOpen, onClose, onSuccess }: AddEmployeeModa
     email: "",
     phone: "",
     cccd: "",
-    position: "Kế toán", // Default non-worker role
+    position: "Ke Toan", // Default non-worker role
     password: "",
   });
 
@@ -48,19 +48,19 @@ export function AddEmployeeModal({ isOpen, onClose, onSuccess }: AddEmployeeModa
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative animate-in fade-in zoom-in duration-200">
-        <button 
-            onClick={onClose}
-            className="absolute right-4 top-4 text-gray-400 hover:text-gray-600"
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-4 text-gray-400 hover:text-gray-600"
         >
-            <X className="h-5 w-5" />
+          <X className="h-5 w-5" />
         </button>
 
         <h2 className="text-xl font-bold mb-4 text-gray-900">Thêm nhân sự quản lý</h2>
-        
+
         {error && (
-            <div className="bg-red-50 text-red-600 p-3 rounded-md text-sm mb-4">
-                {error}
-            </div>
+          <div className="bg-red-50 text-red-600 p-3 rounded-md text-sm mb-4">
+            {error}
+          </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -123,22 +123,22 @@ export function AddEmployeeModal({ isOpen, onClose, onSuccess }: AddEmployeeModa
           <div className="space-y-2">
             <Label htmlFor="position">Vị trí / Chức vụ</Label>
             <select
-                id="position"
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                value={formData.position}
-                onChange={(e) => setFormData({ ...formData, position: e.target.value })}
+              id="position"
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              value={formData.position}
+              onChange={(e) => setFormData({ ...formData, position: e.target.value })}
             >
-                {/* Exclude 'Công nhân may' */}
-                <option value="Tổ trưởng chuyền">Tổ trưởng chuyền</option>
-                <option value="Thợ cắt">Thợ cắt</option>
-                <option value="KCS">KCS (Kiểm tra chất lượng)</option>
-                <option value="Thợ là">Thợ là</option>
-                <option value="Nhân viên kho">Nhân viên kho</option>
-                <option value="Kỹ thuật chuyền">Kỹ thuật chuyền</option>
-                <option value="Quản lý sản xuất">Quản lý sản xuất</option>
-                <option value="Kế toán">Kế toán</option>
-                <option value="Nhân sự">Nhân sự</option>
-                <option value="Bảo vệ">Bảo vệ</option>
+              {/* Exclude 'Công nhân may' */}
+              <option value="To Truong">To Truong</option>
+              <option value="Thợ cắt">Thợ cắt</option>
+              <option value="KCS">KCS (Kiểm tra chất lượng)</option>
+              <option value="Thợ là">Thợ là</option>
+              <option value="Kho">Kho</option>
+              <option value="Kỹ thuật chuyền">Kỹ thuật chuyền</option>
+              <option value="Quan Ly Xuong">Quan Ly Xuong</option>
+              <option value="Ke Toan">Ke Toan</option>
+              <option value="Nhan Su">Nhan Su</option>
+              <option value="Bảo vệ">Bảo vệ</option>
             </select>
           </div>
 

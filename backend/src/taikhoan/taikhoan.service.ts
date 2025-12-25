@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import * as repository from './taikhoan.repository.ts';
+import * as repository from './taikhoan.repository';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
@@ -37,5 +37,51 @@ export class TaiKhoanService {
         const user = await repository.createUser({
             ...input, password: hashedPassword });
             return user;
-        } 
+        }
+
+    async createWorker(leaderId: string, leaderToSanXuatID: string | null | undefined, input: {
+        fullName: string;
+        phone: string;
+        cccd: string;
+        username: string;
+        email: string;
+    }) {
+        if (!leaderToSanXuatID) {
+            throw new Error("Tổ trưởng chưa được phân công tổ sản xuất.");
+        }
+
+        // Default password for workers (can be changed later)
+        const hashedPassword = await bcrypt.hash("123456", 10);
+        
+        return repository.createUser({
+            ...input,
+            email: input.email,
+            password: hashedPassword,
+            position: "Công nhân may", // Hardcoded role for workers added by Team Leader
+            toSanXuatID: leaderToSanXuatID
+        });
+    }
+
+    async createEmployee(input: {
+        fullName: string;
+        phone: string;
+        cccd: string;
+        username: string;
+        email: string;
+        position: string;
+        password?: string;
+    }) {
+        // Prevent creating "Worker" roles via this API (Team Leader responsibility)
+        if (input.position === "Công nhân may") {
+            throw new Error("Quản lý xưởng không được phép thêm Công nhân may. Vui lòng để Tổ trưởng thực hiện.");
+        }
+
+        const password = input.password || "123456";
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        return repository.createUser({
+            ...input,
+            password: hashedPassword
+        });
+    } 
 }

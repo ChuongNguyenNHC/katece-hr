@@ -1,17 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import { ScheduleView } from "@/components/schedule-view";
 import { IncomeOverview } from "@/components/income-overview";
-import { AvailabilityModal } from "@/components/availability-modal";
-import { Button } from "@/components/ui/button";
-import { Settings, FileText, DollarSign, Users } from "lucide-react";
+import { FileText, DollarSign, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 
 export default function TeamLeaderDashboardPage() {
-  const [isAvailabilityOpen, setIsAvailabilityOpen] = useState(false);
-
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -20,14 +15,6 @@ export default function TeamLeaderDashboardPage() {
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">Tổng quan tổ trưởng</h1>
             <p className="text-gray-500 mt-1">Quản lý đội nhóm và công việc cá nhân.</p>
          </div>
-        <Button 
-            onClick={() => setIsAvailabilityOpen(true)}
-            variant="outline"
-            className="gap-2"
-        >
-            <Settings className="h-4 w-4" />
-            Đăng ký lịch làm
-        </Button>
       </div>
 
       {/* Quick Stats / Actions for Management */}
@@ -80,11 +67,6 @@ export default function TeamLeaderDashboardPage() {
         <h2 className="text-xl font-bold text-gray-900 border-b pb-2">Thu nhập cá nhân</h2>
         <IncomeOverview />
       </div>
-
-      <AvailabilityModal 
-        isOpen={isAvailabilityOpen} 
-        onClose={() => setIsAvailabilityOpen(false)} 
-      />
     </div>
   );
 }

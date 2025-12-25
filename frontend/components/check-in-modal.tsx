@@ -12,8 +12,8 @@ interface CheckInModalProps {
 
 // Mock Office Location (approx coordinates)
 const OFFICE_COORDS = {
-  lat: 10.762622, 
-  lng: 106.660172,
+  lat: 10.76143,
+  lng: 106.68217,
 };
 const MAX_DISTANCE_METERS = 300; // Allow 300m radius for testing
 

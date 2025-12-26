@@ -59,6 +59,11 @@ export const assignWorkerToTeam = async (userId: string, toSanXuatID: string) =>
     return response.data;
 };
 
+export const logout = async () => {
+    const response = await api.post('/taikhoan/logout');
+    return response.data;
+};
+
 export const getProductionTeams = async () => {
     const response = await api.get('/taikhoan/production-teams');
     return response.data;

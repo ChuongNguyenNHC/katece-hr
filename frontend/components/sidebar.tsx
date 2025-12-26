@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { logout } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import {
   Home,
@@ -93,6 +94,19 @@ export function Sidebar() {
   const isAccountant = pathname.startsWith("/Accountant");
   const isFactoryManager = pathname.startsWith("/FactoryManager");
   const isWarehouse = pathname.startsWith("/warehouse");
+  const router = useRouter();
+
+  const handleLogout = async () => {
+      try {
+          await logout();
+      } catch (error) {
+          console.error("Logout failed", error);
+      } finally {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          router.push('/Auth');
+      }
+  };
 
   const sidebarItems = isHr
     ? hrSidebarItems
@@ -183,7 +197,10 @@ export function Sidebar() {
                   </Link>
                 </>
               )}
-              <button className="flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-red-500 transition-colors mt-2">
+              <button 
+                onClick={handleLogout}
+                className="flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-red-500 transition-colors mt-2"
+              >
                 <LogOut className="h-3 w-3" />
                 Đăng xuất
               </button>
